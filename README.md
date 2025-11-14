@@ -1,10 +1,10 @@
 # 01Cloud Development Environment
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Last Commit](https://img.shields.io/github/last-commit/BerryBytes/01cloud-development)](https://github.com/BerryBytes/01cloud-development/commits)
-[![Open Issues](https://img.shields.io/github/issues/BerryBytes/01cloud-development)](https://github.com/BerryBytes/01cloud-development/issues)
-[![Open PRs](https://img.shields.io/github/issues-pr/BerryBytes/01cloud-development)](https://github.com/BerryBytes/01cloud-development/pulls)
-[![Contributors](https://img.shields.io/github/contributors/BerryBytes/01cloud-development)](https://github.com/BerryBytes/01cloud-development/graphs/contributors)
+[![Last Commit](https://img.shields.io/github/last-commit/BerryBytes/01cloud-platform)](https://github.com/BerryBytes/01cloud-platform/commits)
+[![Open Issues](https://img.shields.io/github/issues/BerryBytes/01cloud-platform)](https://github.com/BerryBytes/01cloud-platform/issues)
+[![Open PRs](https://img.shields.io/github/issues-pr/BerryBytes/01cloud-platform)](https://github.com/BerryBytes/01cloud-platform/pulls)
+[![Contributors](https://img.shields.io/github/contributors/BerryBytes/01cloud-platform)](https://github.com/BerryBytes/01cloud-platform/graphs/contributors)
 
 A local, reproducible Kubernetes development environment for the 01Cloud platform. This repository orchestrates all 01Cloud microservices and dependencies using Kind, Helm, and Skaffold, and provides a single CLI, 01cloud, to bootstrap, run, seed, and manage the full stack on your machine.
 
