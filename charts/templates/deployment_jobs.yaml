@@ -1,0 +1,218 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: 01cloud-core
+  name: 01cloud-core
+spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: 01cloud-core
+    template:
+      metadata:
+        labels:
+          app: 01cloud-core
+      spec:
+        serviceAccount: staging-sa
+        serviceAccountName: staging-sa
+        containers:
+        - env:
+          - name: STORE_TYPE
+            value: {{.Values.env.STORE_TYPE}}
+          - name: MESSAGE_TYPE
+            value: {{.Values.env.MESSAGE_TYPE}}
+          - name: GCLOUD_PROJECT
+            value: {{.Values.env.GCLOUD_PROJECT}}
+          - name: GCLOUD_NAMESPACE
+            value: {{.Values.env.GCLOUD_NAMESPACE}}
+          - name: GOOGLE_APPLICATION_CREDENTIALS
+            value: {{.Values.env.GOOGLE_APPLICATION_CREDENTIALS}}
+          - name: MONGO_URL
+            valueFrom:
+              secretKeyRef:
+                key: MONGO_URL
+                name: env-secrets
+          - name: MONGO_DB
+            value: {{.Values.env.MONGO_DB}}
+          - name: RABBITMQ_URL
+            valueFrom:
+              secretKeyRef:
+                key: RABBITMQ_URL
+                name: env-secrets
+          - name: DB_HOST
+            value: {{.Values.env.DB_HOST}}
+          - name: DB_DRIVER
+            value: {{.Values.env.DB_DRIVER}}
+          - name: DB_USER
+            value: {{.Values.env.DB_USER}}
+          - name: DB_NAME
+            value: {{.Values.env.DB_NAME}}
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: DB_PASSWORD
+                name: env-secrets
+          - name: DB_PORT
+            value: {{.Values.env.DB_PORT | quote }}
+          - name: API_SERVER
+            value: {{.Values.env.API_SERVER_WS}}
+          - name: API_SECRET
+            valueFrom:
+              secretKeyRef:
+                key: API_SECRET
+                name: env-secrets
+          - name: API_LOCAL_URL
+            value: {{.Values.env.API_SERVER_URL}}
+          image: {{.Values.image.core}}
+          name: 01cloud-core
+          volumeMounts:
+          - mountPath: /data
+            name: 01cloud-data
+        imagePullSecrets:
+        - name: ovh-registry
+        restartPolicy: Always
+        volumes:
+        - name: 01cloud-data
+          persistentVolumeClaim:
+            claimName: pvc-01cloud-data
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: 01cloud-tekton
+  name: 01cloud-tekton
+spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: 01cloud-tekton
+    template:
+      metadata:
+        labels:
+          app: 01cloud-tekton
+      spec:
+        serviceAccount: staging-sa
+        serviceAccountName: staging-sa
+        containers:
+        - env:
+          - name: GCLOUD_PROJECT
+            value: {{.Values.env.GCLOUD_PROJECT}}
+          - name: GCLOUD_NAMESPACE
+            value: {{.Values.env.GCLOUD_NAMESPACE}}
+          - name: GOOGLE_APPLICATION_CREDENTIALS
+            value: {{.Values.env.GOOGLE_APPLICATION_CREDENTIALS}}
+          - name: STORE_TYPE
+            value: {{.Values.env.STORE_TYPE}}
+          - name: MESSAGE_TYPE
+            value: {{.Values.env.MESSAGE_TYPE}}
+          - name: MONGO_URL
+            valueFrom:
+              secretKeyRef:
+                key: MONGO_URL
+                name: env-secrets
+          - name: MONGO_DB
+            value: {{.Values.env.MONGO_DB}}
+          - name: RABBITMQ_URL
+            valueFrom:
+              secretKeyRef:
+                key: RABBITMQ_URL
+                name: env-secrets
+          - name: TEKTON_FILE_PATH
+            value: {{.Values.env.TEKTON_FILE_PATH_v1}}
+          - name: VCLUSTER_API_URL
+            value: {{.Values.env.VCLUSTER_API_URL}}
+          - name: API_SERVER
+            value: {{.Values.env.API_SERVER_WS}}
+          - name: API_SECRET
+            valueFrom:
+              secretKeyRef:
+                key: API_SECRET
+                name: env-secrets
+          image: {{.Values.image.ci}}
+          name: 01cloud-tekton
+          volumeMounts:
+          - mountPath: /data
+            name: 01cloud-data
+        imagePullSecrets:
+        - name: ovh-registry
+        restartPolicy: Always
+        volumes:
+        - name: 01cloud-data
+          persistentVolumeClaim:
+            claimName: pvc-01cloud-data
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: 01cloud-tekton-provision
+spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: 01cloud-tekton-provision
+    template:
+      metadata:
+        labels:
+          app: 01cloud-tekton-provision
+      spec:
+        serviceAccount: staging-sa
+        serviceAccountName: staging-sa
+        containers:
+        - env:
+          - name: GCLOUD_PROJECT
+            value: {{.Values.env.GCLOUD_PROJECT}}
+          - name: GCLOUD_NAMESPACE
+            value: {{.Values.env.GCLOUD_NAMESPACE}}
+          - name: GOOGLE_APPLICATION_CREDENTIALS
+            value: {{.Values.env.GOOGLE_APPLICATION_CREDENTIALS}}
+          - name: SERVER_ADDRESS
+            value: "0.0.0.0"
+          - name: SERVER_PORT
+            value: {{.Values.env.SERVER_PORT | quote}}
+          - name: API_SERVER
+            value: {{.Values.env.API_SERVER_WS}}
+          - name: API_SECRET
+            valueFrom:
+              secretKeyRef:
+                key: API_SECRET
+                name: env-secrets
+          - name: STORE_TYPE
+            value: {{.Values.env.STORE_TYPE}}
+          - name: MESSAGE_TYPE
+            value: {{.Values.env.MESSAGE_TYPE}}
+          - name: MONGO_DB
+            value: {{.Values.env.MONGO_DB}}
+          - name: ZERONE_API_URL
+            value: {{.Values.env.ZERONE_API_URL}}
+          - name: MONGO_URL
+            valueFrom:
+                secretKeyRef:
+                  key: MONGO_URL
+                  name: env-secrets
+          - name: RABBITMQ_URL
+            valueFrom:
+               secretKeyRef:
+                  key: RABBITMQ_URL
+                  name: env-secrets 
+          - name: TEKTON_FILE_PATH
+            value: {{.Values.env.TEKTON_FILE_PATH}}
+          - name: CLUSTER_VERSIONS
+            value: v1.25,v1.24,v1.23,v1.22,v1.21
+          image: {{.Values.image.provision}}
+          name: 01cloud-tekton-provision
+          ports:
+          - containerPort: 6060
+            name: 01cloud
+            protocol: TCP
+          volumeMounts:
+          - mountPath: /data
+            name: 01cloud-data
+        imagePullSecrets:
+        - name: ovh-registry
+        restartPolicy: Always
+        volumes:
+        - name: 01cloud-data
+          persistentVolumeClaim:
+            claimName: pvc-01cloud-data

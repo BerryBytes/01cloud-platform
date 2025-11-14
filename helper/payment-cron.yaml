@@ -1,0 +1,71 @@
+apiVersion: v1
+items:
+- apiVersion: batch/v1
+  kind: CronJob
+  metadata:
+    name: invoice-cron
+  spec:
+    concurrencyPolicy: Forbid
+    failedJobsHistoryLimit: 62
+    jobTemplate:
+      metadata:
+        creationTimestamp: null
+      spec:
+        template:
+          metadata:
+            creationTimestamp: null
+          spec:
+            containers:
+            - args:
+              - /bin/sh
+              - -ec
+              - curl {{.Values.env.API_SERVER_URL}}/payment/createinvoicehistory?uid=0
+                -X POST
+              image: buildpack-deps:curl
+              imagePullPolicy: IfNotPresent
+              name: callout
+              terminationMessagePath: /dev/termination-log
+              terminationMessagePolicy: File
+            dnsPolicy: ClusterFirst
+            restartPolicy: Never
+            schedulerName: default-scheduler
+            terminationGracePeriodSeconds: 30
+    schedule: 0 0 1 * *
+    successfulJobsHistoryLimit: 62
+    suspend: false
+- apiVersion: batch/v1
+  kind: CronJob
+  metadata:
+    name: paycheck-cron
+  spec:
+    concurrencyPolicy: Forbid
+    failedJobsHistoryLimit: 12
+    jobTemplate:
+      metadata:
+        creationTimestamp: null
+      spec:
+        template:
+          metadata:
+            creationTimestamp: null
+          spec:
+            containers:
+            - args:
+              - /bin/sh
+              - -ec
+              - curl {{.Values.env.API_SERVER_URL}}/payment/checkpayment?uid=0 -X POST
+              image: buildpack-deps:curl
+              imagePullPolicy: IfNotPresent
+              name: paycheckcron
+              terminationMessagePath: /dev/termination-log
+              terminationMessagePolicy: File
+            dnsPolicy: ClusterFirst
+            restartPolicy: Never
+            schedulerName: default-scheduler
+            terminationGracePeriodSeconds: 30
+    schedule: 0 0 * * *
+    successfulJobsHistoryLimit: 12
+    suspend: false
+kind: List
+metadata:
+  resourceVersion: ""
+  

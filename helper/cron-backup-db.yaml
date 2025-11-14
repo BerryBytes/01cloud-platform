@@ -1,0 +1,42 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: postgres-backup-job
+spec:
+  schedule: "3 */3 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: postgres-backup
+            image: zeronecloud/gsutil:v1.0.0
+            command: ["sh", "-c"]
+            args:
+            - |
+              export PGPASSWORD="$(cat /data/DB_PASS)"
+              cp data/.boto /root/
+              filepath=$(date +'%Y/%m/%d')
+              filename=$(date +'cloud-db_%H-%M-%S.gz')
+              pg_dump -U berrybytes -h postgres cloud | gzip > $filename
+              gsutil cp $filename gs://zerone-backup-dev/$filepath/$filename
+            volumeMounts:
+            - name: backup-secret
+              mountPath: /data
+              readOnly: true
+          volumes:
+          - name: backup-secret
+            secret:
+              secretName: backup-secret
+          restartPolicy: OnFailure
+---
+
+apiVersion: v1
+data:
+  .boto: W0NyZWRlbnRpYWxzXQpnc19zZXJ2aWNlX2tleV9maWxlID0gL2RhdGEvZ29vZ2xlLmpzb24KW0JvdG9dCmh0dHBzX3ZhbGlkYXRlX2NlcnRpZmljYXRlcyA9IFRydWUKW0dTVXRpbF0KY29udGVudF9sYW5ndWFnZSA9IGVuCmRlZmF1bHRfYXBpX3ZlcnNpb24gPSAyCmRlZmF1bHRfcHJvamVjdF9pZCA9IHplcm9uZS1kZXZvcHMtbGFicwoKCg==
+  google.json: ewogICJ0eXBlIjogInNlcnZpY2VfYWNjb3VudCIsCiAgInByb2plY3RfaWQiOiAiemVyb25lLWRldm9wcy1sYWJzIiwKICAicHJpdmF0ZV9rZXlfaWQiOiAiNTYwMTUxNzg3YzJkYjE4ZTkwNGE3ODE3MmI4M2Q4ZjQxMmE1NTZiNSIsCiAgInByaXZhdGVfa2V5IjogIi0tLS0tQkVHSU4gUFJJVkFURSBLRVktLS0tLVxuTUlJRXZRSUJBREFOQmdrcWhraUc5dzBCQVFFRkFBU0NCS2N3Z2dTakFnRUFBb0lCQVFDZ2d2eURJT3MrWCtrc1xuQzNBUWpuM0tUUnU5Y1k0RHM2L3NNL0J2TlRoVWkwc2syRmNMSG5FN1FUbHBNV29wSHd6VkVDcy83OW5vMFZoNlxucVozMUJpcU9FMWh6WUlpR0JRVGJKNTE2YlFvcVFMY1dHYUVoSFhsYmh0T2hYbGxVWmtmV2lEQlp6T2RJUm03M1xuTlpXLytqWkpHV0k1Qm5OdWJsSzRrdzU4MWFGa1ZOVVhtMDhaa3RkS0lSSlcrRDNmWFMrREhPMHJiaWlReFVPYVxuUEhDMnFQL0dsZjhxdFczNU50eFBBWjVSVW9GdnlQWlQ0enpqSUpnSU9KUFVBTWNyOVN4SzFwSHcrdHFQZ1RZT1xucmxxS2VDdUpKOVhiNzdhSHNqOGF2NmVjc1RoU0k0UGVtSWxTU09nK1JlbVRlaGkrWG5KaTA3U2tSa3pSUW4rWlxuaStpUllGRWZBZ01CQUFFQ2dnRUFHZGsrUlBlMktwTlRmNDVQKzdxV3MwOTdtaVNCVkVOSm4yWTE0QkxZQVhWMVxuSW5mY2ZLUG9aRHg2dkdBQzBxQjNkcEJtQnFQZm1jaXMwUVFqdGVQS1VwcjI4WTJvTHJ6OExUYlIrM2MzM2RvU1xuSWZMNnFkU1BTSmdMMkw3UzcrNlF2eEdyaDZxaHpGZmJZdUEwUDNoUjZhKzJ5NndvUnE1cGorUE92M2UveCtKSVxuQ3czWm40SWZqUUlUZFhLVkpjVmpNS1BkaTJMaUxNNHV1d1RSRlZYME42TFYrUWFUR09DS1k3SmlkM3hYQlRBSFxuV1lUVS9qVjRIK3dxbmNQc00xU05Dd1ZxbnRzNU5hYW9YdDB2WFZLM2FGcWlxR1pYOFFSdWV4RGFEUm00YXBtQ1xuRFNFUFdtSFhPakxTbnRGYVNtUTVqSDhGb2t0Z1BLZnhnNE4zMnV1UlFRS0JnUURZQUd3cW9RVkpUSlJwMmI3ZlxuRGs0NmFqQ2t6bUMrOGd3djdHelJEb0IzNnlqdG5rSmRWelhQRE1oZk5UUnRQbVI5NTlweXM2bDVWRDVrWmRVVlxuVVJlN0hHUGN6UmN3MjJzSlFndzg1bUlteXUxTGs0MjNpYmFvMk05WUhjMTFqTGVHTUlhaityY2F4UHZSc2xLWVxuNS81N0FnOW5GUzVYaDd2MHY0THNKVHBsRHdLQmdRQytQQTVoVWkrUGQ0VEpydVpaNklhRVp3Q2EyazBTVGlLYVxuUlpHZlVFYjFkT1RPZ2dHSy9wTVhpWjE0SFhUT2ltTWx4SkNwSDRyQ1pnOHRscXBjaWl1dS95TW42ZmdpTCtTOVxuaGdLTmkva3ZOc2Z0NXZJUjFKZTJTYmVHSHk0a1h0SG1WSDB4a1krNTM3S3Fpbzl2UUpyRHlyUStBTWc5UjJMNlxuaWxxWlpqSHk4UUtCZ0RacjVOVFl2UHc2enluY01yc0FYN1ZZQytsNkZlWUdGZ3Y5QlcybXViZDlDRkxXRE9KM1xubHBjVUlXZmJmOW9HWGt0YW55OUhGT3Y4emJ0OTdMSHlQSWhvSHNFQzYxVGo4NVBoa0RQSDEvTHVMZHRjMGRmc1xuV3Brd0J3MnNkSmVwWEpQeXBmbXFzWGVOS2VVcmlLUDl6NkF1WkxNVUl4anFtZkNRVCt3dmRRY0JBb0dBTnpyU1xuWmZqcGEvcWtKN1hLbE9ISVpCcFBkNlhYYUhBYzViTTY4d2pvZ1F6ZC9RS0xsaUlRN0cxOHRVbkFCdEx3dEI5Y1xuYkcyRzZLZWUwbnFDblhsVDgydUpkbVljTHppK2JUUEIrL3hlYlJHM2U5OW4ranRCakovY1Uya3NDVTBxSFhmOFxuSE84SXprc2U0UnAzU0RKMmZFK1dnc1hSWE5FajhGOUlyRzZhSTlFQ2dZRUFraUthQ2pyYmY1WXRPVWFkb2hHcVxuTDhlUTlUZHN3cWF3NXFzTHhMRlQ4OGltaVRoek9wYzNBMlRHK3Y1Y24rNHBQdjRDYlM2REJxSmZnVUQzVm5vUVxuY1FpNlNyQzJRVFdTbDA1V2IzbjdjUGE1RUptOTZlbmxXTUlMRGZpOXRXY2VmdHAycVhaYk5tQjNBZ2pwNzlvK1xuN3pDL0lFN29DUVlOWDNzSGx4OFdheTA9XG4tLS0tLUVORCBQUklWQVRFIEtFWS0tLS0tXG4iLAogICJjbGllbnRfZW1haWwiOiAidmVsZXJvQHplcm9uZS1kZXZvcHMtbGFicy5pYW0uZ3NlcnZpY2VhY2NvdW50LmNvbSIsCiAgImNsaWVudF9pZCI6ICIxMTc3MTUzNDc4NjI0MzU4MzgyNDkiLAogICJhdXRoX3VyaSI6ICJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20vby9vYXV0aDIvYXV0aCIsCiAgInRva2VuX3VyaSI6ICJodHRwczovL29hdXRoMi5nb29nbGVhcGlzLmNvbS90b2tlbiIsCiAgImF1dGhfcHJvdmlkZXJfeDUwOV9jZXJ0X3VybCI6ICJodHRwczovL3d3dy5nb29nbGVhcGlzLmNvbS9vYXV0aDIvdjEvY2VydHMiLAogICJjbGllbnRfeDUwOV9jZXJ0X3VybCI6ICJodHRwczovL3d3dy5nb29nbGVhcGlzLmNvbS9yb2JvdC92MS9tZXRhZGF0YS94NTA5L3ZlbGVybyU0MHplcm9uZS1kZXZvcHMtbGFicy5pYW0uZ3NlcnZpY2VhY2NvdW50LmNvbSIKfQo=
+  DB_PASS: cGFzc3dvcmQ=
+kind: Secret
+metadata:
+  name: backup-secret
+type: Opaque

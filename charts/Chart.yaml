@@ -1,0 +1,6 @@
+apiVersion: v2
+appVersion: 1.6.53
+description: A helm chart for 01cloud microservices
+name: cloud
+type: application
+version: 0.1.0

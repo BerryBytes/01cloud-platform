@@ -1,0 +1,19 @@
+{
+  "setting": {
+    "properties": {
+      "executionTime": {
+        "description": "set execution time for running web script",
+        "title": "Execution Time",
+        "type": "string",
+        "value": "15"
+      },
+      "uploadSizeMb": {
+        "description": "set upload size for web uploads",
+        "title": "Upload Size",
+        "type": "string",
+        "value": "8"
+      }
+    },
+    "type": "object"
+  }
+}

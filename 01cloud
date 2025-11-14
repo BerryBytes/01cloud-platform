@@ -1,0 +1,98 @@
+#!/bin/bash
+if [ "$1" == "install" ]
+then
+    if [ -z "$KUBECONFIG" ]
+    then
+        export KUBECONFIG=~/.kube/config
+    fi
+    sudo --preserve-env=KUBECONFIG bash helper/install.sh $2 $3
+elif [ "$1" == "setup" ]
+then
+    bash helper/setup.sh $2 $3
+elif [ "$1" == "host" ]
+then
+    if [ -z "$KUBECONFIG" ]
+    then
+        export KUBECONFIG=~/.kube/config
+    fi
+    echo "You need sudo access to perform this action"
+    sudo --preserve-env=KUBECONFIG bash helper/host.sh $2
+    printf "\nRun './01cloud --help' for more options\n"
+elif [ "$1" == "dbseed" ]
+then
+    bash seeder/seeder.sh
+elif [ "$1" == "dbrun" ]
+then
+    kubectl apply -f helper/db_services.yaml
+    if [ "$2" == "rwx" ]
+    then
+        kubectl apply -f helper/pvc_rwx.yaml
+    else
+        kubectl apply -f helper/pvc_rwo.yaml
+    fi
+    sleep 5
+    printf "\nRun './01cloud --help' for more options\n"
+elif [ "$1" == "dbstop" ]
+then
+    skaffold delete
+    sleep 2
+    kubectl delete -f helper/db_services.yaml
+    printf "\nRun './01cloud --help' for more options\n"
+elif [ "$1" == "clone" ]
+then
+    bash helper/clone.sh
+elif [ "$1" == "deploy" ]
+then
+    skaffold deploy
+elif [ "$1" == "build" ]
+then
+    source helper/create_session.sh
+    skaffold build
+elif [ "$1" == "dev" ]
+then
+    source helper/create_session.sh
+    skaffold dev
+elif [ "$1" == "run" ]
+then
+    source helper/create_session.sh
+    skaffold run
+    printf "\nRun './01cloud --help' for more options\n"
+elif [ "$1" == "stop" ]
+then
+    skaffold delete
+    printf "\nRun './01cloud --help' for more options\n"
+elif [ "$1" == "clean" ]
+then
+    skaffold delete
+    sleep 2
+    kubectl delete -f helper/db_services.yaml
+    bash helper/cleanup_setup.sh
+    printf "\nRun './01cloud --help' for more options\n"
+else
+echo "Usage:"
+echo "  ./01cloud [command]"
+echo ""
+echo "Available Commands:"
+echo "  install [env [mode]]  setup and install the 01cloud service into the cluster."
+echo "              env  - local(default) / remote"
+echo "              mode - rwo(default) / rwx"
+echo "  setup [env [mode]]  install required packages into the cluster."
+echo "              env  - local(default) / remote"
+echo "              mode - rwo(default) / rwx"
+echo ""
+echo "  dbrun [mode]  install database instances in the cluster with pvc volumes."
+echo "              mode - rwo(default) / rwx"
+echo ""
+echo "  host [option]     add host into /etc/hosts/ location."
+echo "              option - add(default) / remove"
+echo ""
+echo "  run         execute scaffold run command to build and deploy 01cloud."
+echo "  dbseed      import sample data into database for preparing 01cloud environment."
+echo "  stop        stop and terminate services started by dev/run/deploy command."
+echo "  dbstop      stop and terminate all the service including pvc and database instances."
+echo "  dev         start scaffold with dev environemnt."
+echo "  build       build the image with skaffold."
+echo "  deploy      deploy 01cloud with default settings."
+echo "  clean       remove all the setup and deployed services."
+fi
+

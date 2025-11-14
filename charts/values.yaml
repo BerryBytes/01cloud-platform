@@ -1,0 +1,99 @@
+# Default values for staging.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+image:
+
+  ui: 01community/01cloud:v0.0.1
+  admin: 01community/01cloud-admin:v0.0.1
+  api: 01community/01cloud-api:v0.0.1
+  core: 01community/01cloud-core:v0.0.1
+  ci: 01community/01cloud-tekton-ci:v0.0.1
+  provision: 01community/01cloud-tekton-provision:v0.0.1
+  payment: 01community/01cloud-payments:v0.0.1
+  support: 01community/01cloud-support:v0.0.1
+  notification: 01community/01cloud-notification:v0.0.1
+  monitoring: 01community/01cloud-monitoring:v0.0.1
+  backup: 01community/01cloud-backup:v0.0.1
+  exsecret: 01community/01cloud-exsecret:v0.0.1
+
+secret:
+  API_SECRET: --- YOUR-API-SECRET ---
+  DB_PASSWORD: --- YOUR-DB-PASSWORD ---
+  SMTP_PASSWORD: --- YOUR-SMTP-PASSWORD ---
+  DB_URL: --- YOUR-DB-URL ---
+  MONGO_URL: --- YOUR-MONGO-URL ---
+  RABBITMQ_URL: --- YOUR-RABBITMQ-URL ---
+  MONGODB_PASSWORD: --- YOUR-MONGO-PASSWORD ---
+  RABBITMQ_PASSWORD: --- YOUR-RABBITMQ-PASSWORD ---
+  TLS_CRT:  --- YOUR-TLS ---
+  TLS_KEY:  --- YOUR-KEY ---
+  MODE: bGVnYWN5
+
+env:
+  API_SERVER_URL: https://api.staging.01cloud.dev
+  UI_SERVER_URL: https://console.staging.01cloud.dev
+  hostUI: console.staging.01cloud.dev
+  hostAdmin: admin.staging.01cloud.dev
+  hostApi: api.staging.01cloud.dev
+  hostTerminal: terminal.staging.01cloud.dev
+  paymentSuccessUiUrl: https://console.staging.01cloud.dev/payment/success
+  paymentFailedUiUrl: https://console.staging.01cloud.dev/payment/failure
+  terminalUrl: https://terminal.staging.01cloud.dev
+  PROMETHEUS_API_URL: http://prometheus-operated.monitoring.svc.cluster.local:9090
+  REACT_APP_AUTH0_MODE: "legacy"
+  REACT_APP_AUTH0_DOMAIN: " "
+  REACT_APP_AUTH0_CLIENT_ID: " "
+  REACT_APP_AUTH0_AUDIENCE: " "
+
+  
+  API_SERVER_WS: ws://cloud-api.01cloud-staging.svc:8081
+  GRPC_NOTIFICATION_SERVER: cloud-notifications:10081
+  GRPC_SUPPORT_SERVER: cloud-support:10081
+  grpcBackupServer: cloud-backup:50051
+  ticketServerUrl: http://cloud-support:5000
+  monitoringServerUrl: http://cloud-monitoring:8081
+  paymentServerUrl: http://cloud-payments:8080
+  helmcdServerUrl: http://cloud-helm-cd:8080
+  
+  SMTP_FROM_ADDRESS: --- YOUR-EMAIL-ADDRESS ---
+  SMTP_HOST: --- YOUR-SMTP-HOST ---
+  SMTP_PORT: --- YOUR-SMTP-PORT ---
+  SMTP_USERNAME: apikey
+  DB_DRIVER: postgres
+  DB_HOST: staging-postgres-postgresql
+  DB_NAME: cloud
+  DB_PORT: "5432"
+  DB_USER: berrybytes
+  DB_BACKUP_PATH: /data/db-backup
+  MONGO_DB: cloud
+  mongoUser: berrybytes 
+  rabbitmqUser: berrybytes
+  STORE_TYPE: mongo
+  MESSAGE_TYPE: rabbitmq
+  GCLOUD_NAMESPACE: --- YOUR-GCLOUD-NAMESPACE (OPTIONAL) ---
+  GCLOUD_PROJECT: --- YOUR-GCLOUD-PROJECT (OPTIONAL) ---
+  GOOGLE_APPLICATION_CREDENTIALS: /data/gcloud.json
+
+  TLS: zerone-tls-cert
+  dockerPluginId: "3"
+  TEKTON_FILE_PATH: data.sample
+  TEKTON_FILE_PATH_v1: data.sample/v1
+  VCLUSTER_API_URL: https://zerone-4409-9534.01cloud.com/v1
+  ZERONE_API_URL: https://api.staging.01cloud.dev
+  invoicePath: /data/invoices
+  adminEmail: --- YOUR-ADMIN-EMAIL ---
+  RECAPTCHA_SECRET: --- YOUR-RECAPTCHA-SECRET ---
+  storageAccessKey: --- YOUR-STORAGE-ACCESS-KEY ---
+  storageSecretKey: --- YOUR-STORAGE-SECRET-KEY ---
+
+  sonarqubeHost:  --- YOUR-SONARQUBE-HOST ---
+  sonarqubeUser: --- YOUR-SONARQUBE-USER ---
+  sonarqubePassword: --- YOUR-SONARQUBE-PASSWORD ---
+  scannerApiUrl: --- YOUR-SCANNER-API-URL ---
+  scannerUsername: --- YOUR-SCANNER-USERNAME ---
+  scannerPassword: --- YOUR-SCANNER-PASSWORD ---
+
+  alertManagerHost: --- YOUR-ALERT-MANAGER-HOST ---
+  alertManagerUser: --- YOUR-ALERT-MANAGER-USER ---
+  alertManagerPassword: --- YOUR-ALERT-MANAGER-PASSWORD ---

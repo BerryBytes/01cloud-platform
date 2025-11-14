@@ -1,0 +1,238 @@
+{
+	"externalLogger": [{
+			"name": "s3",
+			"displayName": "S3",
+			"config": {
+				"keys": ["aws_credential"],
+				"type": "object",
+				"properties": {
+					"aws_credential": {
+						"keys": ["access_key", "secret_key", "bucket", "region"],
+						"properties": {
+							"access_key": {
+								"description": "",
+								"form": true,
+								"hidden": true,
+								"title": "Access Key",
+								"type": "string",
+								"value": ""
+							},
+							"secret_key": {
+								"description": "",
+								"form": true,
+								"hidden": true,
+								"title": "Secret Key",
+								"type": "string",
+								"value": ""
+							},
+							"bucket": {
+								"description": "",
+								"form": true,
+								"title": "Bucket",
+								"type": "string",
+								"value": ""
+							},
+							"region": {
+								"description": "",
+								"form": true,
+								"title": "AWS region",
+								"type": "string",
+								"value": ""
+							}
+						},
+						"type": "object"
+					}
+				}
+			}
+		},
+		{
+			"name": "cloudwatch",
+			"displayName": "Cloudwatch",
+			"config": {
+				"keys": ["aws_credential"],
+				"type": "object",
+				"properties": {
+					"aws_credential": {
+						"keys": ["access_key", "secret_key", "region"],
+						"properties": {
+							"access_key": {
+								"description": "",
+								"form": true,
+								"hidden": true,
+								"title": "Access Key",
+								"type": "string",
+								"value": ""
+							},
+							"secret_key": {
+								"description": "",
+								"form": true,
+								"hidden": true,
+								"title": "Secret Key",
+								"type": "string",
+								"value": ""
+							},
+							"region": {
+								"description": "",
+								"form": true,
+								"title": "AWS region",
+								"type": "string",
+								"value": ""
+							}
+						},
+						"type": "object"
+					}
+				}
+			}
+		},
+		{
+			"name": "elastic",
+			"displayName": "Elastic",
+			"config": {
+				"keys": ["elastic_credential"],
+				"type": "object",
+				"properties": {
+					"elastic_credential": {
+						"keys": ["host", "port", "user", "password", "scheme"],
+						"properties": {
+							"host": {
+								"description": "",
+								"form": true,
+								"title": "Host",
+								"type": "string",
+								"value": ""
+							},
+							"port": {
+								"description": "",
+								"form": true,
+								"title": "Port",
+								"type": "string",
+								"value": ""
+							},
+							"user": {
+								"description": "",
+								"form": true,
+								"title": "User",
+								"type": "string",
+								"value": ""
+							},
+							"password": {
+								"description": "",
+								"form": true,
+								"hidden": true,
+								"title": "Password",
+								"type": "string",
+								"value": ""
+							},
+							"scheme": {
+								"description": "",
+								"form": true,
+								"title": "Scheme",
+								"type": "string",
+								"value": ""
+							}
+						},
+						"type": "object"
+					}
+				}
+			}
+		},
+		{
+			"name": "loki",
+			"displayName": "Loki",
+			"config": {
+				"keys": ["loki_credential"],
+				"type": "object",
+				"properties": {
+					"loki_credential": {
+						"keys": ["host"],
+						"properties": {
+							"host": {
+								"description": "",
+								"form": true,
+								"title": "Host",
+								"type": "string",
+								"value": ""
+							}
+						},
+						"type": "object"
+					}
+				}
+			}
+		},
+		{
+			"name": "kafka",
+			"displayName": "Kafka",
+			"config": {
+				"keys": ["kafka_credential"],
+				"type": "object",
+				"properties": {
+					"kafka_credential": {
+						"keys": ["host", "default_topic", "format_type"],
+						"properties": {
+							"host": {
+								"description": "",
+								"form": true,
+								"title": "Host",
+								"type": "string",
+								"value": ""
+							},
+							"default_topic": {
+								"description": "",
+								"form": true,
+								"title": "Default Topic",
+								"type": "string",
+								"value": ""
+							},
+							"format_type": {
+								"description": "",
+								"form": true,
+								"title": "Format Type",
+								"type": "string",
+								"value": ""
+							}
+						},
+						"type": "object"
+					}
+				}
+			}
+		},
+		{
+			"name": "gcp",
+			"displayName": "GCP",
+			"config": {
+				"keys": ["gcp_credential"],
+				"type": "object",
+				"properties": {
+					"gcp_credential": {
+						"keys": ["project", "bucket", "key_file"],
+						"properties": {
+							"project": {
+								"description": "",
+								"form": true,
+								"title": "Project ID",
+								"type": "string",
+								"value": ""
+							},
+							"bucket": {
+								"description": "",
+								"form": true,
+								"title": "Bucket",
+								"type": "string",
+								"value": ""
+							},
+							"key_file": {
+								"description": "Select credential file",
+								"form": true,
+								"required": true,
+								"title": "Service account file",
+								"type": "file",
+								"value": ""
+							}
+						},
+						"type": "object"
+					}
+				}
+			}
+		}
+	]
+}

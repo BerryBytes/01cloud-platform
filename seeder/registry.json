@@ -1,0 +1,138 @@
+[
+	{
+	"config": {
+		"keys": ["name", "credentials"],
+		"properties": {
+			"credentials": {
+				"keys": ["aws.region", "aws.access_key", "aws.secret_access_key"],
+				"properties": {
+					"aws.access_key": {
+						"description": "",
+						"form": true,
+						"hidden": true,
+						"title": "Access Key",
+						"type": "string",
+						"value": ""
+					},
+					"aws.region": {
+						"description": "",
+						"form": true,
+						"title": "AWS region",
+						"type": "string",
+						"value": ""
+					},
+					"aws.secret_access_key": {
+						"description": "",
+						"form": true,
+						"hidden": true,
+						"title": "Secret Key",
+						"type": "string",
+						"value": ""
+					}
+				},
+				"type": "object"
+			},
+			"name": {
+				"description": "",
+				"errorDescription": "Allowed only lowercase characters, numbers, space and underscore",
+				"form": true,
+				"title": "Name",
+				"type": "string",
+				"validation": "^[a-z0-9_ ]*$",
+				"value": ""
+			}
+		},
+		"type": "object"
+	},
+	"name": "aws"
+}, {
+	"config": {
+		"keys": ["name", "credentials"],
+		"properties": {
+			"credentials": {
+				"properties": {
+					"gcp.google_app_cred": {
+						"description": "Select credential file",
+						"form": true,
+						"required": true,
+						"title": "Service account file",
+						"type": "file",
+						"value": ""
+					}
+				},
+				"type": "object"
+			},
+			"name": {
+				"description": "",
+				"errorDescription": "Allowed only lowercase characters, numbers, space and underscore",
+				"form": true,
+				"title": "Name",
+				"type": "string",
+				"validation": "^[a-z0-9_ ]*$",
+				"value": ""
+			}
+		},
+		"type": "object"
+	},
+	"name": "gcp"
+}, {
+	"config": {
+		"keys": ["name", "credentials"],
+		"properties": {
+			"credentials": {
+				"keys": ["credentials.docker_registry_server", "credentials.project_name", "credentials.docker_username", "credentials.docker_password"],
+				"properties": {
+					"credentials.docker_password": {
+						"description": "",
+						"errorDescription": "Must contain at least 1 number, 1 special character, 1 uppercase and lowercase letter with 10 or more length",
+						"form": true,
+						"hidden": true,
+						"optional": true,
+						"title": "Password",
+						"type": "string",
+						"value": ""
+					},
+					"credentials.docker_registry_server": {
+						"description": "",
+						"errorDescription": "Allowed only lowercase characters, numbers and underscore",
+						"form": true,
+						"title": "Registry Url",
+						"type": "string",
+						"validation": "([a-z0-9|-]+\\.)*[a-z0-9|-]+\\.[a-z]+",
+						"value": ""
+					},
+					"credentials.docker_username": {
+						"description": "",
+						"errorDescription": "Allowed only lowercase characters, numbers and underscore",
+						"form": true,
+						"optional": true,
+						"title": "Username",
+						"type": "string",
+						"value": ""
+					},
+					"credentials.project_name": {
+						"description": "",
+						"errorDescription": "Allowed only lowercase characters, numbers and underscore",
+						"form": true,
+						"title": "Project Name",
+						"type": "string",
+						"value": ""
+					}
+				},
+				"type": "object"
+			},
+			"name": {
+				"description": "",
+				"errorDescription": "Allowed only lowercase characters, numbers, space and underscore",
+				"form": true,
+				"title": "Name",
+				"type": "string",
+				"validation": "^[a-z0-9_ ]*$",
+				"value": ""
+			}
+		},
+		"type": "object"
+	},
+	"name": "custom"
+}
+]

@@ -1,0 +1,156 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: cloud-admin
+  spec:
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - port: 80
+    selector:
+      app: 01cloud-admin
+- apiVersion: v1    
+  kind: Service
+  metadata:
+    name: cloud-api
+  spec:
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - port: 8081
+    selector:
+      app: 01cloud-api
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: cloud-backup
+  spec:
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - port: 50051
+    selector:
+      app: 01cloud-backup
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: cloud-helm-cd
+  spec:
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - port: 8080
+    selector:
+      app: 01cloud-helm-cd
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: cloud-monitoring
+  spec:
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - port: 8081
+    selector:
+      app: 01cloud-monitoring
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: cloud-notifications
+  spec:
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: grpc-server-port
+      port: 10080
+    - name: grpc-api-server-port
+      port: 10081
+    - name: api-server-port
+      port: 10082
+    selector:
+      app: 01cloud-notifications
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: cloud-payments
+  spec:
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - port: 8080
+    selector:
+      app: 01cloud-payments
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: cloud-support
+  spec:
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: grpc
+      port: 50051
+    - name: http
+      port: 5000
+    selector:
+      app: 01cloud-support
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: cloud-tekton
+  spec:
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - port: 6060
+    selector:
+      app: 01cloud-tekton
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: cloud-terminal
+  spec:
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - port: 8080
+    selector:
+      app: 01cloud-terminal
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: cloud-ui
+  spec:
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - port: 80
+    selector:
+      app: 01cloud-ui
+kind: List
+metadata:
+  resourceVersion: ""

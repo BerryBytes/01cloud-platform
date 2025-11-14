@@ -1,0 +1,249 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    labels:
+      app: 01cloud-admin
+    name: 01cloud-admin
+spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: 01cloud-admin
+    template:
+      metadata:
+        labels:
+          app: 01cloud-admin
+      spec:
+        containers:
+        - image: {{.Values.image.admin }}
+          livenessProbe:
+            failureThreshold: 3
+            tcpSocket:
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 30
+            successThreshold: 1
+            timeoutSeconds: 1
+          name: 01cloud-admin
+          ports:
+          - containerPort: 80
+            name: 01staging-admin
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            tcpSocket:
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          volumeMounts:
+          - mountPath: /usr/share/nginx/html/config.js
+            name: config
+            subPath: config.js
+        dnsPolicy: ClusterFirst
+        imagePullSecrets:
+        - name: ovh-registry
+        restartPolicy: Always
+        volumes:
+        - configMap:
+            defaultMode: 420
+            name: config-admin
+          name: config
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    labels:
+      app: 01cloud-api
+    name: 01cloud-api
+spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: 01cloud-api
+    template:
+      metadata:
+        labels:
+          app: 01cloud-api
+      spec:
+        containers:
+        - env:
+          - name: STORE_TYPE
+            value: {{.Values.env.STORE_TYPE}}
+          - name: MESSAGE_TYPE
+            value: {{.Values.env.MESSAGE_TYPE}}
+          - name: GCLOUD_PROJECT
+            value: {{.Values.env.GCLOUD_PROJECT}}
+          - name: GCLOUD_NAMESPACE
+            value: {{.Values.env.GCLOUD_NAMESPACE}}
+          - name: MONGO_URL
+            valueFrom:
+              secretKeyRef:
+                key: MONGO_URL
+                name: env-secrets
+          - name: MONGO_DB
+            value: {{.Values.env.MONGO_DB}}
+          - name: RABBITMQ_URL
+            valueFrom:
+              secretKeyRef:
+                key: RABBITMQ_URL
+                name: env-secrets
+          - name: DB_HOST
+            value: {{.Values.env.DB_HOST}}
+          - name: DB_DRIVER
+            value: {{.Values.env.DB_DRIVER}}
+          - name: DB_USER
+            value: {{.Values.env.DB_USER}}
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: DB_PASSWORD
+                name: env-secrets
+          - name: DB_NAME
+            value: {{.Values.env.DB_NAME}}
+          - name: DB_PORT
+            value: {{.Values.env.DB_PORT | quote }}
+          - name: API_SECRET
+            valueFrom:
+              secretKeyRef:
+                key: API_SECRET
+                name: env-secrets
+          - name: BASE_URL
+            value: {{.Values.env.API_SERVER_URL}}
+          - name: API_SERVER
+            value: {{.Values.env.API_SERVER_WS}}
+          - name: HOST_URL
+            value: {{.Values.env.UI_SERVER_URL}}
+          - name: RECAPTCHA_SECRET
+            value: {{.Values.env.RECAPTCHA_SECRET}}
+          - name: GRPC_NOTIFICATION_SERVER
+            value: {{.Values.env.GRPC_NOTIFICATION_SERVER}}
+          - name: GRPC_BACKUP_SERVER
+            value: {{.Values.env.grpcBackupServer}}
+          - name: TICKET_SERVER_URL
+            value: {{.Values.env.ticketServerUrl}}
+          - name: MONITORING_SERVER_URL
+            value: {{.Values.env.monitoringServerUrl}}
+          - name: ADMIN_EMAIL
+            value: {{.Values.env.adminEmail}}
+          - name: DOCKER_PLUGIN_ID
+            value: {{.Values.env.dockerPluginId | quote}}
+          - name: MODE
+            valueFrom:
+              secretKeyRef:
+                name: env-secrets
+                key: MODE
+          - name: HELM_PLUGIN_ID
+            value: {{.Values.env.dockerPluginId | quote}}
+          - name: OPERATOR_PLUGIN_ID
+            value: {{.Values.env.dockerPluginId | quote}}  
+          - name: PAYMENT_SERVER_URL
+            value: {{.Values.env.paymentServerUrl}}
+          - name: HELM_CD_SERVER_URL
+            value: {{.Values.env.helmcdServerUrl}}
+          - name: STORAGE_ACCESS_KEY
+            value: {{.Values.env.storageAccessKey}}
+          - name: STORAGE_SECRET_KEY
+            value: {{.Values.env.storageSecretKey}}
+          - name: SECURITY_SCANNER_SONAR_HOST
+            value: {{.Values.env.sonarqubeHost}}
+          - name: SECURITY_SCANNER_SONAR_USERNAME
+            value: {{.Values.env.sonarqubeUser}}
+          - name: SECURITY_SCANNER_SONAR_PASSWORD
+            value: {{.Values.env.sonarqubePassword}}
+          - name: SECURITY_SCANNER_API
+            value: {{.Values.env.scannerApiUrl}}
+          - name: SECURITY_SCANNER_USERNAME
+            value: {{.Values.env.scannerUsername}}
+          - name: SECURITY_SCANNER_PASSWORD
+            value: {{.Values.env.scannerPassword}}
+          - name: GOOGLE_APPLICATION_CREDENTIALS
+            value: {{.Values.env.GOOGLE_APPLICATION_CREDENTIALS}}
+          image: {{.Values.image.api }}
+          livenessProbe:
+            failureThreshold: 3
+            tcpSocket:
+              port: 8081
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          name: 01cloud-api
+          ports:
+          - containerPort: 8081
+            name: 01cloud
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            tcpSocket:
+              port: 8081
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          volumeMounts:
+          - mountPath: /data
+            name: 01cloud-data
+        dnsPolicy: ClusterFirst
+        imagePullSecrets:
+        - name: ovh-registry
+        restartPolicy: Always
+        volumes:
+        - name: 01cloud-data
+          persistentVolumeClaim:
+            claimName: pvc-01cloud-data
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: 01cloud-ui
+  name: 01cloud-ui
+spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: 01cloud-ui
+    template:
+      metadata:
+        labels:
+          app: 01cloud-ui
+      spec:
+        containers:
+        - image: {{.Values.image.ui }}
+          livenessProbe:
+            failureThreshold: 3
+            tcpSocket:
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 30
+            successThreshold: 1
+            timeoutSeconds: 1
+          name: 01cloud-ui
+          ports:
+          - containerPort: 80
+            name: http
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            tcpSocket:
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          volumeMounts:
+          - mountPath: /usr/share/nginx/html/config.js
+            name: config
+            subPath: config.js
+        dnsPolicy: ClusterFirst
+        imagePullSecrets:
+        - name: ovh-registry
+        restartPolicy: Always
+        volumes:
+        - configMap:
+            defaultMode: 420
+            name: config
+          name: config

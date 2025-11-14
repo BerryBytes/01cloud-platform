@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: 01cloud-logging
+  name: 01cloud-logging
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: 01cloud-logging
+  template:
+    metadata:
+      labels:
+        app: 01cloud-logging
+    spec:
+      serviceAccount: staging-sa
+      serviceAccountName: staging-sa
+      containers:
+      - env:
+        - name: API_SECRET
+          valueFrom:
+            secretKeyRef:
+              key: API_SECRET
+              name: env-secrets
+        - name: BASE_URL
+          value: {{.Values.env.API_SERVER_URL}}
+        - name: GCLOUD_PROJECT
+          value: {{.Values.env.GCLOUD_PROJECT}}
+        - name: GCLOUD_NAMESPACE
+          value: {{.Values.env.GCLOUD_NAMESPACE}}
+        - name: API_SERVER
+          value: {{.Values.env.API_SERVER_WS}}
+        - name: STORE_TYPE
+          value: {{.Values.env.STORE_TYPE}}
+        - name: MESSAGE_TYPE
+          value: {{.Values.env.MESSAGE_TYPE}}
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: {{.Values.env.GOOGLE_APPLICATION_CREDENTIALS}}
+        - name: MONGO_URL
+          valueFrom:
+            secretKeyRef:
+              key: MONGO_URL
+              name: env-secrets
+        - name: MONGO_DB
+          value: {{.Values.env.MONGO_DB}}
+        - name: RABBITMQ_URL
+          valueFrom:
+            secretKeyRef:
+              key: RABBITMQ_URL
+              name: env-secrets
+        image: {{.Values.image.logging}}
+        name: 01cloud-logging
+        volumeMounts:
+        - mountPath: /data
+          name: 01cloud-data
+      imagePullSecrets:
+      - name: ovh-registry
+      restartPolicy: Always
+      volumes:
+      - name: 01cloud-data
+        persistentVolumeClaim:
+          claimName: pvc-01cloud-data

@@ -1,0 +1,32 @@
+{
+    "subscriptions": [
+        {
+            "_id": "d5cd81b2-ff37-42bb-a211-59d00a6e5689",
+            "name": "basic",
+            "pods": 20,
+            "service": 20,
+            "config_map": 20,
+            "persistance_vol_claims": 20,
+            "replication_ctl": 20,
+            "secrets": 20,
+            "loadbalancer": 0,
+            "node_port": 20,
+            "created": "2023-07-21T13:59:43.970126",
+            "updated": "2023-07-21T13:59:43.970126"
+        },
+        {
+            "_id": "c3d70ead-8311-4823-b37c-f7e12642136f",
+            "name": "platinum",
+            "pods": 30,
+            "service": 30,
+            "config_map": 30,
+            "persistance_vol_claims": 30,
+            "replication_ctl": 30,
+            "secrets": 30,
+            "loadbalancer": 0,
+            "node_port": 30,
+            "created": "2023-08-08T13:53:53.418097",
+            "updated": "2023-08-08T13:53:53.418103"
+        }
+    ]
+}

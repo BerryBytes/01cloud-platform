@@ -1,0 +1,96 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: 01cloud-backup
+  name: 01cloud-backup
+spec:
+  selector:
+    matchLabels:
+      app: 01cloud-backup
+  template:
+    metadata:
+      labels:
+        app: 01cloud-backup
+    spec:
+      serviceAccount: staging-sa
+      serviceAccountName: staging-sa
+      containers:
+      - env:
+        - name: DEBUG
+          value: "true"
+        - name: API_URL
+          value: {{.Values.env.API_SERVER_URL}} 
+        - name: API_SECRET
+          valueFrom:
+            secretKeyRef:
+              key: API_SECRET
+              name: env-secrets
+        - name: DB_HOST                                                                                 
+          value: {{.Values.env.DB_HOST}}                                                                                                                                        
+        - name: DB_USER                                                                                 
+          value: {{.Values.env.DB_USER}}                                                                             
+        - name: DB_PASSWORD                                                                             
+          valueFrom:
+            secretKeyRef:
+              key: DB_PASSWORD
+              name: env-secrets                                                                    
+        - name: DB_NAME                                                                                 
+          value: {{.Values.env.DB_NAME}}                                                                                
+        - name: DB_PORT                                                                                 
+          value: {{.Values.env.DB_PORT | quote }}  
+        - name: DB_BACKUP_PATH
+          value: {{.Values.env.DB_BACKUP_PATH}}
+        - name: GRPC_SERVER_PORT
+          value: 0.0.0.0:50051
+        - name: GCLOUD_PROJECT
+          value: {{.Values.env.GCLOUD_PROJECT}}
+        - name: GCLOUD_NAMESPACE
+          value: {{.Values.env.GCLOUD_NAMESPACE}}      
+        - name: GRPC_NOTIFICATION_SERVER
+          value: {{.Values.env.GRPC_NOTIFICATION_SERVER}}    
+        - name: HOST_URL
+          value: {{.Values.env.UI_SERVER_URL}}    
+        - name: WS_SECRET
+          valueFrom:
+            secretKeyRef:
+              key: API_SECRET
+              name: env-secrets
+        - name: WS_SERVER
+          value: {{.Values.env.API_SERVER_WS}}
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: {{.Values.env.GOOGLE_APPLICATION_CREDENTIALS}}
+        image: {{.Values.image.backup}}
+        livenessProbe:
+          failureThreshold: 3
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          successThreshold: 1
+          tcpSocket:
+            port: 50051
+          timeoutSeconds: 1
+        name: 01cloud-backup
+        ports:
+        - containerPort: 50051
+          name: 01cloud
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 3
+          initialDelaySeconds: 15
+          periodSeconds: 30
+          successThreshold: 1
+          tcpSocket:
+            port: 50051
+          timeoutSeconds: 1
+        volumeMounts:
+        - mountPath: /data
+          name: 01cloud-data
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+      - name: ovh-registry
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      volumes:
+      - name: 01cloud-data
+        persistentVolumeClaim:
+          claimName: pvc-01cloud-data

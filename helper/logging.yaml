@@ -1,0 +1,33 @@
+apiVersion: logging.banzaicloud.io/v1beta1
+kind: Logging
+metadata:
+  name: logging
+spec:
+  fluentd: {}
+  fluentbit: {}
+  controlNamespace: logging
+---
+apiVersion: logging.banzaicloud.io/v1beta1
+kind: ClusterFlow
+metadata:
+ name: 01cloud-flow
+spec:
+  globalOutputRefs:
+    - 01cloud-output
+  match:
+    - select:
+        namespaces:
+        - 01cloud
+---
+apiVersion: logging.banzaicloud.io/v1beta1
+kind: ClusterOutput
+metadata:
+ name: 01cloud-output
+spec:
+ loki:
+   buffer:
+     timekey: 1m
+     timekey_use_utc: true
+     timekey_wait: 30s
+   configure_kubernetes_labels: true
+   url: http://loki:3100

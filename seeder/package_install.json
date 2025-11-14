@@ -1,0 +1,160 @@
+{
+	"packages": [{
+		"chart": "zerone/sealed-secrets",
+		"name": "sealed-secrets",
+		"title": "Sealed Secrets",
+		"namespace": "zerone-sealed-secrets",
+		"optional": true,
+		"icon": "https://avatars2.githubusercontent.com/u/34656521?s=400&v=4",
+		"description": "Sealed Secrets are a one-way encrypted Secret that can be created by anyone, but can only be decrypted by the controller running in the target cluster. The Sealed Secret is safe to share publicly, upload to git repositories, post to twitter, etc."
+	}, {
+		"chart": "zerone/cert-manager",
+		"name": "cert-manager",
+		"title": "Certificate Manager",
+		"optional": false,
+		"namespace": "zerone-cert-manager",
+		"required_dns": true,
+		"icon": "https://miro.medium.com/max/4000/0*p8GVsIz3mA69XE78.png",
+		"description": "cert-manager is a native Kubernetes certificate management controller. It can help with issuing certificates from a variety of sources, such as Let's Encrypt, HashiCorp Vault, Venafi, a simple signing key pair, or self signed."
+	}, {
+		"chart": "zerone/contour",
+		"name": "contour",
+		"title": "Contour Ingress Controller",
+		"namespace": "zerone-projectcontour",
+		"required_dns": true,
+		"optional": false,
+		"needs": ["lb-controller","dns-controller"],
+		"icon": "https://github.com/projectcontour/contour/raw/main/contour.png",  
+		"description": "Contour is an Ingress controller for Kubernetes that works by deploying the Envoy proxy as a reverse proxy and load balancer."
+	}, {
+		"chart": "zerone/dns-controller",
+		"name": "dns-controller",
+		"title": "DNS Controller",
+		"optional": false,
+		"namespace": "zerone-dns-controller",
+		"required_dns": true,
+		"icon": "https://console.01cloud.io/meta.jpg",
+		"description": "A controller that  creates a CNAME record in the DNS Server to access your web applications as soon as new environment  is created"
+	}, {
+		"chart": "zerone/reloader",
+		"name": "reloader",
+		"title": "Secrets/ConfigMap Reloader",
+		"optional": true,
+		"namespace": "zerone-reloader",
+		"icon":"https://console.01cloud.io/meta.jpg",
+		"description": "Reloader is a tool to  watch changes in ConfigMap and Secret and do rolling upgrades on Pods with their associated DeploymentConfigs, Deployments, Daemonsets and Statefulsets."
+	},
+	 {
+                "chart": "zerone/secret-patcher",
+                "name": "secret-patcher",
+		"title": "Secret Patcher",
+		"namespace": "zerone-secret-patcher",
+                "optional": true,
+                "icon": "https://console.01cloud.io/meta.jpg",
+                "description": "Secret Patcher patches the  service account with an imagepullsecrets that allows the service account of the pod to pull the  images from container registry"
+        },
+        {
+		"chart": "zerone/velero",
+		"name": "velero",
+		"title": "Velero",
+		"optional": true,
+		"namespace": "velero",
+		"icon": "https://pbs.twimg.com/profile_images/1092805171938234371/CeyfzQLG.jpg",
+		"description": "Velero is an open source tool to safely backup and restore, perform disaster recovery, and migrate Kubernetes cluster resources and persistent volumes"
+	},
+	{
+		"chart": "zerone/zerone-jobs",
+		"name": "zerone-jobs",
+		"title": "Zerone Jobs",
+		"namespace": "zerone-jobs",
+		"optional": true,
+		"icon": "https://console.01cloud.io/meta.jpg",
+		"description": "A package to implement cronjobs  in the cluster"
+	},
+	{
+		"chart": "zerone/olm",
+		"name": "olm",
+		"title": "Olm",
+		"namespace": "olm",
+		"optional": true,
+		"icon": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQOerPLW0IlhRXeaKou-2TfphlK40GwFiocRQ&usqp=CAU",
+		"description": "A package to install operator lifecycle Manager in the cluster"
+	},
+
+	{
+                "chart": "zerone/tekton",
+                "name": "tekton",
+                "title": "Tekton",
+                "namespace": "tekton-pipelines",
+                "optional": true,
+                "icon": "https://avatars.githubusercontent.com/u/47602533?s=280&v=4",
+                "description": "A package to install powerful and flexible kubernetes-native open source CI/CD systems"
+        },
+
+	{
+		"chart": "zerone/prometheus-operator",
+		"name": "prometheus-operator",
+		"title": "Prometheus",
+		"optional": false,
+		"namespace": "zerone-monitoring",
+		"required_dns": true,
+		"needs": ["dns-controller","contour"],
+		"icon": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Prometheus_software_logo.svg/1200px-Prometheus_software_logo.svg.png",
+		"description": "Prometheus is a systems and service monitoring system. It collects metrics from configured targets at given intervals, evaluates rule expressions, displays the results, and can trigger alerts when specified conditions are observed."
+	},
+	{
+		"chart": "zerone/external-secrets",
+		"name": "external-secrets",
+		"title": "External Secrets",
+		"optional": true,
+		"namespace": "zerone-external-secret",
+		"required_dns": false,
+		"icon": "https://console.01cloud.io/meta.jpg",
+		"description": "external secrets operator is a Kubernetes operator that integrates external secret management systems like AWS Secrets Manager, HashiCorp Vault, Google Secrets Manager and many more in our 01cloud environment"
+	},
+	{
+		"chart": "zerone/external-logging",
+		"name": "external-logging",
+		"title": "External Logger",
+		"optional": true,
+		"namespace": "zerone-external-logging",
+		"required_dns": false,
+		"icon": "https://console.01cloud.io/meta.jpg",
+		"description": "The Logging operator manages the log collectors and log forwarders of your logging infrastructure, and the routing rules that specify where you want to send your different log messages."
+		},
+		{
+			"chart": "zerone/flagger",
+			"name": "flagger",
+			"title": "Flagger",
+			"optional": true,
+			"namespace": "zerone-flagger",
+			"required_dns": false,
+			"icon": "https://console.01cloud.io/meta.jpg",
+			"description": "Progressive Delivery operator for Kubernetes (Canary, A/B Testing and Blue/Green deployments)"
+		},
+
+		        {
+            "chart": "zerone/openebs",
+            "name": "openebs",
+            "title": "openebs",
+            "optional": true,
+            "namespace": "zerone-openebs",
+            "required_dns": false,
+            "icon": "https://console.01cloud.io/meta.jpg",
+            "description": " OpenEBS turns any storage available to Kubernetes worker nodes into Local or Distributed Kubernetes Persistent Volumes."
+        }],
+	"repositories": [{
+		"name": "zerone",
+		"url": "https://berrybytes.github.io/helm-chart-org"
+	}],
+	"templates": [{
+		"name": "tiny",
+		"packages": ["cert-manager", "contour", "dns-controller", "lb-controller", "prometheus-operator","zerone/flagger","zerone/openebs"]
+	}, {
+		"name": "small",
+		"packages": ["cert-manager", "contour", "argo", "dns-controller", "prometheus-operator", "lb-controller","zerone/flagger","zerone/openebs"]
+	}, {
+		"name": "large",
+		"packages": ["cert-manager", "contour", "sealed-secrets", "argo", "dns-controller", "lb-controller","olm", "reloader", "prometheus-operator","zerone/flagger","zerone/openebs"]
+	}]
+}

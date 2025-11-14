@@ -1,0 +1,373 @@
+apiVersion: v1
+kind: List
+items:
+- apiVersion: v1
+  kind: Namespace
+  metadata:
+    name: 01cloud-staging
+- apiVersion: apps/v1
+  kind: StatefulSet
+  metadata:
+    labels:
+      app.kubernetes.io/instance: staging-postgres
+      app.kubernetes.io/name: postgresql
+    name: staging-postgres-postgresql
+    namespace: 01cloud-staging
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app.kubernetes.io/instance: staging-postgres
+        app.kubernetes.io/name: postgresql
+        role: primary
+    serviceName: staging-postgres-postgresql-headless
+    template:
+      metadata:
+        labels:
+          app.kubernetes.io/instance: staging-postgres
+          app.kubernetes.io/name: postgresql
+          role: primary
+        name: staging-postgres-postgresql
+      spec:
+        containers:
+        - env:
+          - name: BITNAMI_DEBUG
+            value: "false"
+          - name: POSTGRESQL_PORT_NUMBER
+            value: "5432"
+          - name: POSTGRESQL_VOLUME_DIR
+            value: /bitnami/postgresql
+          - name: PGDATA
+            value: /bitnami/postgresql/data
+          - name: POSTGRES_POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: postgres-password
+                name: staging-db
+          - name: POSTGRES_USER
+            value: berrybytes
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: postgres-password
+                name: staging-db
+          - name: POSTGRES_DB
+            value: cloud
+          - name: POSTGRESQL_ENABLE_LDAP
+            value: "no"
+          - name: POSTGRESQL_ENABLE_TLS
+            value: "no"
+          - name: POSTGRESQL_LOG_HOSTNAME
+            value: "false"
+          - name: POSTGRESQL_LOG_CONNECTIONS
+            value: "false"
+          - name: POSTGRESQL_LOG_DISCONNECTIONS
+            value: "false"
+          - name: POSTGRESQL_PGAUDIT_LOG_CATALOG
+            value: "off"
+          - name: POSTGRESQL_CLIENT_MIN_MESSAGES
+            value: error
+          - name: POSTGRESQL_SHARED_PRELOAD_LIBRARIES
+            value: pgaudit
+          image: docker.io/bitnamilegacy/postgresql:17.6.0-debian-12-r4
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            exec:
+              command:
+              - /bin/sh
+              - -c
+              - exec pg_isready -U "berrybytes" -d "dbname=cloud" -h 127.0.0.1 -p 5432
+            failureThreshold: 6
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          name: staging-postgres-postgresql
+          ports:
+          - containerPort: 5432
+            name: tcp-postgresql
+            protocol: TCP
+          readinessProbe:
+            exec:
+              command:
+              - /bin/sh
+              - -c
+              - -e
+              - |
+                exec pg_isready -U "berrybytes" -d "dbname=cloud" -h 127.0.0.1 -p 5432
+                [ -f /opt/bitnami/postgresql/tmp/.initialized ] || [ -f /bitnami/postgresql/.initialized ]
+            failureThreshold: 6
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          resources:
+            requests:
+              cpu: 250m
+              memory: 256Mi
+          securityContext:
+            runAsUser: 1001
+          volumeMounts:
+          - mountPath: /dev/shm
+            name: dshm
+          - mountPath: /bitnami/postgresql
+            name: data
+        restartPolicy: Always      
+        securityContext:
+          fsGroup: 1001
+        volumes:
+        - emptyDir:
+            medium: Memory
+            sizeLimit: 1Gi
+          name: dshm
+    updateStrategy:
+      type: RollingUpdate
+    volumeClaimTemplates:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: data
+      spec:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
+        volumeMode: Filesystem
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    labels:
+      app.kubernetes.io/instance: staging-mongodb
+      app.kubernetes.io/name: mongodb
+    name: staging-mongodb
+    namespace: 01cloud-staging
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app.kubernetes.io/instance: staging-mongodb
+        app.kubernetes.io/name: mongodb
+    template:
+      metadata:
+        labels:
+          app.kubernetes.io/instance: staging-mongodb
+          app.kubernetes.io/name: mongodb
+      spec:
+        affinity:
+          podAntiAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/instance: staging-mongodb
+                    app.kubernetes.io/name: mongodb
+                namespaces:
+                - 01cloud-staging
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        containers:
+        - env:
+          - name: BITNAMI_DEBUG
+            value: "false"
+          - name: MONGODB_ROOT_USER
+            value: berrybytes
+          - name: MONGODB_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: mongodb-password
+                name: staging-db
+          - name: ALLOW_EMPTY_PASSWORD
+            value: "no"
+          - name: MONGODB_SYSTEM_LOG_VERBOSITY
+            value: "0"
+          - name: MONGODB_DISABLE_SYSTEM_LOG
+            value: "no"
+          - name: MONGODB_DISABLE_JAVASCRIPT
+            value: "no"
+          - name: MONGODB_ENABLE_JOURNAL
+            value: "yes"
+          - name: MONGODB_PORT_NUMBER
+            value: "27017"
+          - name: MONGODB_ENABLE_IPV6
+            value: "no"
+          - name: MONGODB_ENABLE_DIRECTORY_PER_DB
+            value: "no"
+          image: docker.io/bitnamilegacy/mongodb:6.0.1-debian-11-r11
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            exec:
+              command:
+              - /bitnami/scripts/ping-mongodb.sh
+            failureThreshold: 6
+            initialDelaySeconds: 30
+            periodSeconds: 20
+            successThreshold: 1
+            timeoutSeconds: 10
+          name: mongodb
+          ports:
+          - containerPort: 27017
+            name: mongodb
+            protocol: TCP
+          readinessProbe:
+            exec:
+              command:
+              - /bitnami/scripts/readiness-probe.sh
+            failureThreshold: 6
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1001
+          volumeMounts:
+          - mountPath: /bitnami/mongodb
+            name: datadir
+          - mountPath: /bitnami/scripts
+            name: common-scripts
+        restartPolicy: Always      
+        securityContext:
+          fsGroup: 1001
+        volumes:
+        - configMap:
+            defaultMode: 360
+            name: staging-mongodb-common-scripts
+          name: common-scripts
+        - name: datadir
+          persistentVolumeClaim:
+            claimName: staging-mongodb
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    name: staging-rabbitmq
+    namespace: 01cloud-staging
+  spec:
+    selector:
+      matchLabels:
+        app: staging-rabbitmq
+    template:
+      metadata:
+        labels:
+          app: staging-rabbitmq
+      spec:      
+        containers:
+        - env:
+          - name: RABBITMQ_DEFAULT_USER
+            value: berrybytes
+          - name: RABBITMQ_DEFAULT_PASS
+            valueFrom: 
+              secretKeyRef:
+                key: rabbitmq-password
+                name: staging-db
+          image: rabbitmq:management
+          name: rabbit
+          ports:
+          - containerPort: 15672
+            name: 01cloud-rabbit
+            protocol: TCP
+          - containerPort: 5672
+            name: amqp
+            protocol: TCP
+- apiVersion: v1
+  kind: Service
+  metadata:
+    labels:
+      app.kubernetes.io/instance: staging-mongodb
+      app.kubernetes.io/name: mongodb
+    name: staging-mongodb
+    namespace: 01cloud-staging
+  spec:
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: mongodb
+      port: 27017
+      targetPort: mongodb
+    selector:
+      app.kubernetes.io/instance: staging-mongodb
+      app.kubernetes.io/name: mongodb
+- apiVersion: v1
+  kind: Service
+  metadata:
+    labels:
+      app.kubernetes.io/instance: staging-postgres
+      app.kubernetes.io/name: postgresql
+    name: staging-postgres-postgresql
+    namespace: 01cloud-staging
+  spec:
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: tcp-postgresql
+      port: 5432
+      targetPort: tcp-postgresql
+    selector:
+      app.kubernetes.io/instance: staging-postgres
+      app.kubernetes.io/name: postgresql
+      role: primary
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: staging-rabbitmq
+    namespace: 01cloud-staging
+  spec:
+    ports:
+    - name: amqp
+      port: 5672
+      targetPort: amqp
+    - name: http-stats
+      port: 15672
+      targetPort: stats
+    selector:
+     app: staging-rabbitmq
+- apiVersion: v1
+  data:
+    rabbitmq-password: cGFzc3dvcmQ=
+    postgres-password: cGFzc3dvcmQ=
+    mongodb-password: cGFzc3dvcmQ=
+  kind: Secret
+  metadata:
+    name: staging-db
+    namespace: 01cloud-staging
+  type: Opaque
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    name: staging-mongodb
+    namespace: 01cloud-staging
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi      
+- apiVersion: v1
+  data:
+    ping-mongodb.sh: |
+      #!/bin/bash
+      mongosh  $TLS_OPTIONS --port $MONGODB_PORT_NUMBER --eval "db.adminCommand('ping')"
+    readiness-probe.sh: |
+      #!/bin/bash
+      # Run the proper check depending on the version
+      [[ $(mongod -version | grep "db version") =~ ([0-9]+\.[0-9]+\.[0-9]+) ]] && VERSION=${BASH_REMATCH[1]}
+      . /opt/bitnami/scripts/libversion.sh
+      VERSION_MAJOR="$(get_sematic_version "$VERSION" 1)"
+      VERSION_MINOR="$(get_sematic_version "$VERSION" 2)"
+      VERSION_PATCH="$(get_sematic_version "$VERSION" 3)"
+      if [[ ( "$VERSION_MAJOR" -ge 5 ) || ( "$VERSION_MAJOR" -ge 4 && "$VERSION_MINOR" -ge 4 && "$VERSION_PATCH" -ge 2 ) ]]; then
+          mongosh $TLS_OPTIONS --port $MONGODB_PORT_NUMBER --eval 'db.hello().isWritablePrimary || db.hello().secondary' | grep -q 'true$'
+      else
+          mongosh  $TLS_OPTIONS --port $MONGODB_PORT_NUMBER --eval 'db.isMaster().ismaster || db.isMaster().secondary' | grep -q 'true$'
+      fi
+    startup-probe.sh: |
+      #!/bin/bash
+      mongosh  $TLS_OPTIONS --port $MONGODB_PORT_NUMBER --eval 'db.hello().isWritablePrimary || db.hello().secondary' | grep -q 'true$'
+  kind: ConfigMap
+  metadata:
+    name: staging-mongodb-common-scripts
+    namespace: 01cloud-staging

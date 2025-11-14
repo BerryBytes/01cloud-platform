@@ -1,0 +1,43 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  data:
+    config.js: |
+      window.config = {
+          REACT_APP_01CLOUD_DOCS: "https://docs.01cloud.io",
+          REACT_APP_RESTAPI_ENDPOINT: "https://api.staging.01cloud.dev",
+          REACT_APP_SOCKET_IO_ENDPOINT: "wss://api.staging.01cloud.dev/ws",
+          REACT_APP_RECAPTCHA_SITEKEY: "--- YOUR-RECAPTCHA-SITEKEY ---",
+          REACT_APP_MESSAGE_ORIGIN_URL: "https://console.staging.01cloud.dev",
+          REACT_APP_GITHUB_AUTHORIZE_ENDPOINT: "https://github.com/login/oauth/authorize",
+          REACT_APP_GITHUB_CLIENTID: "--- YOUR-GITHUB-CLIENT-ID ---",
+          REACT_APP_OAUTH_REDIRECT_URL: "https://console.staging.01cloud.dev/login/external/github",
+          REACT_APP_GITLAB_AUTHORIZE_ENDPOINT: "https://gitlab.com/oauth/authorize",
+          REACT_APP_GITLAB_CLIENTID: "--- YOUR-GITLAB-CLIENT-ID ---",
+          REACT_APP_GITLAB_OAUTH_REDIRECT_URL: "https://console.staging.01cloud.dev/login/external/gitlab",
+          REACT_APP_BITBUCKET_AUTHORIZE_ENDPOINT: "https://bitbucket.org/site/oauth2/authorize",
+          REACT_APP_BITBUCKET_CLIENTID: "--- YOUR-BITBUCKET-CLIENT-ID ---",
+          REACT_APP_CLUSTER_MANAGER_OAUTH: " ",
+          REACT_APP_CLUSTER_OAUTH_REDIRECT_URL: "https://console.staging.01cloud.dev/loginsso/clustermanager",
+          REACT_APP_01CLOUD_APPID: "01cloud",
+          REACT_APP_AUTH0_MODE: "legacy",
+          REACT_APP_AUTH0_DOMAIN: "--- YOUR-AUTH0-DOMAIN ---",
+          REACT_APP_AUTH0_CLIENT_ID: "--- YOUR-AUTH0-CLIENT-ID ---",
+          REACT_APP_AUTH0_AUDIENCE: "--- YOUR-AUTH0-AUDIENCE ---"
+      }
+  kind: ConfigMap
+  metadata:
+    name: config
+- apiVersion: v1
+  data:
+    config.js: |
+      window.config = {
+          REACT_APP_RESTAPI_ENDPOINT: "https://api.staging.01cloud.dev",
+          REACT_APP_SOCKET_IO_ENDPOINT: "wss://api.staging.01cloud.dev/ws"
+      }
+  kind: ConfigMap
+  metadata:
+    name: config-admin
+kind: List
+metadata:
+  resourceVersion: ""
