@@ -60,6 +60,7 @@ env:
   SMTP_HOST: --- YOUR-SMTP-HOST ---
   SMTP_PORT: --- YOUR-SMTP-PORT ---
   SMTP_USERNAME: --- YOUR-SMTP-USERNAME ---
+  SMTP_USERNAME: --- YOUR-SMTP-USERNAME ---
 
 ### DB_services.yaml, Change according to your preference
   DB_DRIVER: postgres
@@ -82,10 +83,9 @@ env:
 ##  Recaptcha
   RECAPTCHA_SECRET: --- YOUR-RECAPTCHA-SECRET ---
 
-## gcloud namespace and project can be changed as per your preference. Defaults to below values.
-  GCLOUD_NAMESPACE: sample-namespace
-  GCLOUD_PROJECT: sample-project
-  GOOGLE_APPLICATION_CREDENTIALS: /data/gcloud.json
+## Change these values according to your preference( used in cname creation for running application)
+  GCLOUD_NAMESPACE: staging             #default
+  GCLOUD_PROJECT: 01cloud-staging       #default
 
   TLS: zerone-tls-cert
   dockerPluginId: "3"

@@ -134,9 +134,9 @@ kubectl cluster-info
 kubectl get nodes
 ```
 ### 2)Template preparation:
-Fill the values [`Values.yaml`](charts/template/values.yaml)  and [`ConfigMap.yaml`](charts/template/configmap.yaml) inside the charts/template folder. These Template are necessary during provision for one to get features like 0Auth, mail service etc.
+Fill the values [`Values.yaml`](charts/values.yaml)  and [`ConfigMap.yaml`](charts/template/configmap.yaml) inside the charts/template folder. These Template are necessary during provision for one to get features like 0Auth, mail service etc.
 
-Ensure the `.env` file contains necessary key values according to the sample(`.env.sample`). This step is necessary during `DBseed` process for DNS creation.
+Ensure the `.env` file contains necessary key values according to the sample [`.env.sample`](./.env.sample). This step is necessary during `DBseed` process for DNS creation.
 
 ### 3) Bootstrap and run 01Cloud
 
@@ -317,5 +317,7 @@ If your organization uses this environment or contributes improvements, consider
   - Inspect events/logs: kubectl describe pod/<name> -n 01cloud-staging; kubectl logs <name> -n 01cloud-staging
 - Adjust resources:
   - Edit charts/values.yaml PVC and resource requests/limits as needed
+- Self signed cert not getting accepted ( firefox specially)
+  - Refer to this [doc](docs/mkcert-issue.md) for adding CAroot in your browser.
 
 Enjoy building with 01Cloud!
