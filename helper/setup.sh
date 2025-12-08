@@ -1,6 +1,6 @@
 if [ "$1" != "remote" ]
 then
-  bash helper/setup_metallb.sh 
+  bash helper/setup_metallb.sh
 fi
 if [ "$2" == "rwx" ]
 then

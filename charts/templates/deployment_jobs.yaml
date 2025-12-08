@@ -195,7 +195,7 @@ spec:
             valueFrom:
                secretKeyRef:
                   key: RABBITMQ_URL
-                  name: env-secrets 
+                  name: env-secrets
           - name: TEKTON_FILE_PATH
             value: {{.Values.env.TEKTON_FILE_PATH}}
           - name: CLUSTER_VERSIONS

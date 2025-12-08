@@ -46,7 +46,7 @@ env:
   REACT_APP_AUTH0_CLIENT_ID: " "
   REACT_APP_AUTH0_AUDIENCE: " "
 
-  
+
   API_SERVER_WS: ws://cloud-api.01cloud-staging.svc:8081
   GRPC_NOTIFICATION_SERVER: cloud-notifications:10081
   GRPC_SUPPORT_SERVER: cloud-support:10081
@@ -55,7 +55,7 @@ env:
   monitoringServerUrl: http://cloud-monitoring:8081
   paymentServerUrl: http://cloud-payments:8080
   helmcdServerUrl: http://cloud-helm-cd:8080
-  
+
   SMTP_FROM_ADDRESS: --- YOUR-EMAIL-ADDRESS ---
   SMTP_HOST: --- YOUR-SMTP-HOST ---
   SMTP_PORT: --- YOUR-SMTP-PORT ---
@@ -67,7 +67,7 @@ env:
   DB_USER: berrybytes
   DB_BACKUP_PATH: /data/db-backup
   MONGO_DB: cloud
-  mongoUser: berrybytes 
+  mongoUser: berrybytes
   rabbitmqUser: berrybytes
   STORE_TYPE: mongo
   MESSAGE_TYPE: rabbitmq

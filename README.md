@@ -124,7 +124,7 @@ Install snippets (Linux/Ubuntu):
 You can create your own cluster or use the provided multi-node config for kind:
 
 ```bash
-# Creates a 3-node cluster (1 control-plane, 2 workers) 
+# Creates a 3-node cluster (1 control-plane, 2 workers)
 kind create cluster --name 01cloud-dev --config test-cluster.yaml
 ```
 Verify:
@@ -217,7 +217,7 @@ Notes:
 ### Environments, hosts, and data
 
 - Namespace: 01cloud-staging
-- Hostnames (mapped to your local LB IP via host): 
+- Hostnames (mapped to your local LB IP via host):
   - console.staging.01cloud.dev
   - admin.staging.01cloud.dev
   - api.staging.01cloud.dev
