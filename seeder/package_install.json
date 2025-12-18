@@ -24,7 +24,7 @@
 		"required_dns": true,
 		"optional": false,
 		"needs": ["lb-controller","dns-controller"],
-		"icon": "https://github.com/projectcontour/contour/raw/main/contour.png",  
+		"icon": "https://github.com/projectcontour/contour/raw/main/contour.png",
 		"description": "Contour is an Ingress controller for Kubernetes that works by deploying the Envoy proxy as a reverse proxy and load balancer."
 	}, {
 		"chart": "zerone/dns-controller",

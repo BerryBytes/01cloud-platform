@@ -42,8 +42,6 @@ spec:
             name: config
             subPath: config.js
         dnsPolicy: ClusterFirst
-        imagePullSecrets:
-        - name: ovh-registry
         restartPolicy: Always
         volumes:
         - configMap:
@@ -137,7 +135,7 @@ spec:
           - name: HELM_PLUGIN_ID
             value: {{.Values.env.dockerPluginId | quote}}
           - name: OPERATOR_PLUGIN_ID
-            value: {{.Values.env.dockerPluginId | quote}}  
+            value: {{.Values.env.dockerPluginId | quote}}
           - name: PAYMENT_SERVER_URL
             value: {{.Values.env.paymentServerUrl}}
           - name: HELM_CD_SERVER_URL
@@ -186,8 +184,6 @@ spec:
           - mountPath: /data
             name: 01cloud-data
         dnsPolicy: ClusterFirst
-        imagePullSecrets:
-        - name: ovh-registry
         restartPolicy: Always
         volumes:
         - name: 01cloud-data
@@ -239,8 +235,6 @@ spec:
             name: config
             subPath: config.js
         dnsPolicy: ClusterFirst
-        imagePullSecrets:
-        - name: ovh-registry
         restartPolicy: Always
         volumes:
         - configMap:

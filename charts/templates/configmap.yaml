@@ -20,7 +20,7 @@ items:
           REACT_APP_CLUSTER_MANAGER_OAUTH: " ",
           REACT_APP_CLUSTER_OAUTH_REDIRECT_URL: "https://console.staging.01cloud.dev/loginsso/clustermanager",
           REACT_APP_01CLOUD_APPID: "01cloud",
-          REACT_APP_AUTH0_MODE: "legacy",
+          REACT_APP_AUTH0_MODE: "",
           REACT_APP_AUTH0_DOMAIN: "--- YOUR-AUTH0-DOMAIN ---",
           REACT_APP_AUTH0_CLIENT_ID: "--- YOUR-AUTH0-CLIENT-ID ---",
           REACT_APP_AUTH0_AUDIENCE: "--- YOUR-AUTH0-AUDIENCE ---"
@@ -32,8 +32,13 @@ items:
   data:
     config.js: |
       window.config = {
-          REACT_APP_RESTAPI_ENDPOINT: "https://api.staging.01cloud.dev",
-          REACT_APP_SOCKET_IO_ENDPOINT: "wss://api.staging.01cloud.dev/ws"
+          REACT_APP_RESTAPI_ENDPOINT: "https://api-gateway.staging.01cloud.dev",
+          REACT_APP_SOCKET_IO_ENDPOINT: "wss://ws-gateway.staging.01cloud.dev/ws",
+          REACT_APP_01CLOUD_CONSOLE_URL: "https://console.staging.01cloud.dev",
+          REACT_APP_AUTH0_DOMAIN: "--- YOUR-AUTH0-DOMAIN ---",
+          REACT_APP_AUTH0_CLIENT_ID: "--- YOUR-AUTH0-CLIENT-ID ---",
+          REACT_APP_AUTH0_AUDIENCE: "--- YOUR-AUTH0-AUDIENCE ---"
+          REACT_APP_AUTH0_MODE: ""
       }
   kind: ConfigMap
   metadata:
