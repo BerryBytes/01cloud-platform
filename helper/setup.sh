@@ -22,7 +22,7 @@ kubectl apply --server-side -f https://github.com/kubernetes-sigs/gateway-api/re
 
 echo "Installing KrakenD Helm chart..."
 {
-    helm upgrade --install krakend "$GATEWAY_DIR/krakend-0.1.0.tgz" -n krakend --create-namespace --wait --timeout 10m
+    helm upgrade --install krakend "$GATEWAY_DIR/krakend" -n krakend --create-namespace --wait --timeout 10m
 } || echo " Warning: KrakenD Helm install timed out, continuing..."
 
 echo "Installing Envoy Helm chart..."
@@ -56,5 +56,5 @@ while true; do
 done
 
 sleep 15
-echo "Completed setup, You IP is $loadbalancerIP"
+
 echo "Run './01cloud --help' for more options"
