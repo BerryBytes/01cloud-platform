@@ -4,9 +4,9 @@
 
 image:
 
-  ui: 01community/01cloud:v0.0.1
+  ui: 01community/01cloud-ui:v0.0.2
   admin: 01community/01cloud-admin:v0.0.1
-  api: 01community/01cloud-api:v0.0.1
+  api: 01community/01cloud-api:v0.0.2
   core: 01community/01cloud-core:v0.0.1
   ci: 01community/01cloud-tekton-ci:v0.0.1
   provision: 01community/01cloud-tekton-provision:v0.0.1
