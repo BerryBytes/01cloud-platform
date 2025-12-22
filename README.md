@@ -118,7 +118,7 @@ All services are orchestrated via:
   - Helm 3.x
   - Skaffold 2.x
   - git, curl, jq
-  - See [Authentication Configuration Guide](AUTHENTICATION-CONFIGURATION.md) for detailed steps.
+  - Configure Auth0 and KrankenD, see [Authentication Configuration Guide](AUTHENTICATION-CONFIGURATION.md) for detailed steps
 
 
 Install snippets (Linux/Ubuntu):

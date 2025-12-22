@@ -114,9 +114,9 @@ Save these values for later use:
 
 | Parameter | Location | Example |
 |-----------|----------|---------|
-| **Domain** | Application → Settings → Domain | `your-tenant.auth0.com` |
-| **Client ID** | Application → Settings | `your_client_id_here` |
-| **Audience** | Applications → API → API Identifier | `https://api.01cloud.com` |
+| **Domain** | Application → Settings → Domain | `dev-xxx.us.auth0.comcom` |
+| **Client ID** | Application → Settings | `eyxxxxxME` |
+| **Audience** | Applications → API → API Identifier | `https://dev-xxx.us.auth0.com/api/v2/` |
 
 ## 2. KrakenD Configuration
 
@@ -135,21 +135,20 @@ Update the following template files with your Auth0 values:
 
 **File:** `gateway/config/dev/partials/auth0_audience.tmpl`
 ```json
-"https://{domain-name}.us.auth0.com/api/v2/"
+"https://{{ domain-name }}.us.auth0.com/api/v2/"
 ```
-Replace with your actual API audience (e.g., `"https://api.01cloud.com"`)
 
 **File:** `gateway/config/dev/partials/auth0_jwk_url.tmpl`
 ```json
-"https://{{ .auth0_domain }}/.well-known/jwks.json"
+"https://{{ domain-name }}/.well-known/jwks.json"
 ```
-Replace `{{ .auth0_domain }}` with your Auth0 tenant domain (e.g., `your-tenant.auth0.com`)
+Replace `{{ domain-name }}` with your Auth0 tenant domain
 
 **File:** `gateway/config/dev/partials/auth0_validator.tmpl`
 ```json
 {
-  "audience": "https://{domain-name}.us.auth0.com/api/v2/",
-  "jwk_url": "https://{{ .auth0_domain }}/.well-known/jwks.json",
+  "audience": "https://{{ domain-name }}.us.auth0.com/api/v2/",
+  "jwk_url": "https://{{ domain-name }}/.well-known/jwks.json",
 }
 ```
 Update both `audience` and `jwk_url` with your actual values.
