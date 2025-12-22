@@ -193,7 +193,7 @@ Note: It will auto update the krakend json file in the krakend helm chart
 Console UI
 ```yaml
 REACT_APP_AUTH0_DOMAIN: "your-tenant.auth0.com"
-REACT_APP_AUTH0_CLIENT_ID: "your_client_id"
+REACT_APP_AUTH0_CLIENT_ID: "your_client_id"`
 REACT_APP_AUTH0_AUDIENCE: "https://{{ .auth0_domain }}/.well-known/jwks.json"
 ```
 Admin UI
