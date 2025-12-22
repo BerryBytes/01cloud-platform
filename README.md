@@ -118,7 +118,6 @@ All services are orchestrated via:
   - Helm 3.x
   - Skaffold 2.x
   - git, curl, jq
-  - - **Auth0 and KrakenD**: Configuration is required before installation.
   - See [Authentication Configuration Guide](AUTHENTICATION-CONFIGURATION.md) for detailed steps.
 
 
