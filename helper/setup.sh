@@ -49,12 +49,8 @@ while true; do
             echo "Envoy LoadBalancer is ready: $LB_SVC_NAME -> $ENVOY_IP"
             break
         fi
-    fi
-
-    echo "Waiting for LoadBalancer IP from MetalLB..."
-    sleep 5
-done
-
-sleep 15
-
+        echo "Nginx status :: $ready, sleeping for 10 seconds..."
+        sleep 10
+    done
+echo "Completed setup, You IP is $loadbalancerIP"
 echo "Run './01cloud --help' for more options"
