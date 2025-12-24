@@ -1,5 +1,5 @@
 
-# helm install -n metrics-server metrics-server bitnami/metrics-server --create-namespace --set apiService.create=true 
+# helm install -n metrics-server metrics-server bitnami/metrics-server --create-namespace --set apiService.create=true
 # sleep 5
 # kubectl patch deployment metrics-server -n metrics-server --type=json -p='[{"op": "add", "path": "/spec/template/spec/containers/0/args/-", "value": "--kubelet-insecure-tls" }]'
 

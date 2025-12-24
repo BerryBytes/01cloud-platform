@@ -112,7 +112,7 @@ items:
             name: dshm
           - mountPath: /bitnami/postgresql
             name: data
-        restartPolicy: Always      
+        restartPolicy: Always
         securityContext:
           fsGroup: 1001
         volumes:
@@ -226,7 +226,7 @@ items:
             name: datadir
           - mountPath: /bitnami/scripts
             name: common-scripts
-        restartPolicy: Always      
+        restartPolicy: Always
         securityContext:
           fsGroup: 1001
         volumes:
@@ -250,13 +250,13 @@ items:
       metadata:
         labels:
           app: staging-rabbitmq
-      spec:      
+      spec:
         containers:
         - env:
           - name: RABBITMQ_DEFAULT_USER
             value: berrybytes
           - name: RABBITMQ_DEFAULT_PASS
-            valueFrom: 
+            valueFrom:
               secretKeyRef:
                 key: rabbitmq-password
                 name: staging-db
@@ -345,7 +345,7 @@ items:
     - ReadWriteOnce
     resources:
       requests:
-        storage: 1Gi      
+        storage: 1Gi
 - apiVersion: v1
   data:
     ping-mongodb.sh: |

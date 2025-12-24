@@ -137,7 +137,7 @@ spec:
           - name: HELM_PLUGIN_ID
             value: {{.Values.env.dockerPluginId | quote}}
           - name: OPERATOR_PLUGIN_ID
-            value: {{.Values.env.dockerPluginId | quote}}  
+            value: {{.Values.env.dockerPluginId | quote}}
           - name: PAYMENT_SERVER_URL
             value: {{.Values.env.paymentServerUrl}}
           - name: HELM_CD_SERVER_URL

@@ -20,25 +20,25 @@ spec:
         - name: DEBUG
           value: "true"
         - name: API_URL
-          value: {{.Values.env.API_SERVER_URL}} 
+          value: {{.Values.env.API_SERVER_URL}}
         - name: API_SECRET
           valueFrom:
             secretKeyRef:
               key: API_SECRET
               name: env-secrets
-        - name: DB_HOST                                                                                 
-          value: {{.Values.env.DB_HOST}}                                                                                                                                        
-        - name: DB_USER                                                                                 
-          value: {{.Values.env.DB_USER}}                                                                             
-        - name: DB_PASSWORD                                                                             
+        - name: DB_HOST
+          value: {{.Values.env.DB_HOST}}
+        - name: DB_USER
+          value: {{.Values.env.DB_USER}}
+        - name: DB_PASSWORD
           valueFrom:
             secretKeyRef:
               key: DB_PASSWORD
-              name: env-secrets                                                                    
-        - name: DB_NAME                                                                                 
-          value: {{.Values.env.DB_NAME}}                                                                                
-        - name: DB_PORT                                                                                 
-          value: {{.Values.env.DB_PORT | quote }}  
+              name: env-secrets
+        - name: DB_NAME
+          value: {{.Values.env.DB_NAME}}
+        - name: DB_PORT
+          value: {{.Values.env.DB_PORT | quote }}
         - name: DB_BACKUP_PATH
           value: {{.Values.env.DB_BACKUP_PATH}}
         - name: GRPC_SERVER_PORT
@@ -46,11 +46,11 @@ spec:
         - name: GCLOUD_PROJECT
           value: {{.Values.env.GCLOUD_PROJECT}}
         - name: GCLOUD_NAMESPACE
-          value: {{.Values.env.GCLOUD_NAMESPACE}}      
+          value: {{.Values.env.GCLOUD_NAMESPACE}}
         - name: GRPC_NOTIFICATION_SERVER
-          value: {{.Values.env.GRPC_NOTIFICATION_SERVER}}    
+          value: {{.Values.env.GRPC_NOTIFICATION_SERVER}}
         - name: HOST_URL
-          value: {{.Values.env.UI_SERVER_URL}}    
+          value: {{.Values.env.UI_SERVER_URL}}
         - name: WS_SECRET
           valueFrom:
             secretKeyRef:
