@@ -4,9 +4,9 @@
 
 image:
 
-  ui: 01community/01cloud:v0.0.1
-  admin: 01community/01cloud-admin:v0.0.1
-  api: 01community/01cloud-api:v0.0.1
+  ui: 01community/01cloud-ui:v0.0.2
+  admin: 01community/01cloud-admin:v0.0.2
+  api: 01community/01cloud-api:v0.0.2
   core: 01community/01cloud-core:v0.0.1
   ci: 01community/01cloud-tekton-ci:v0.0.1
   provision: 01community/01cloud-tekton-provision:v0.0.1
@@ -16,6 +16,7 @@ image:
   monitoring: 01community/01cloud-monitoring:v0.0.1
   backup: 01community/01cloud-backup:v0.0.1
   exsecret: 01community/01cloud-exsecret:v0.0.1
+  logging: 01community/01cloud-exlogger:v0.0.1
 
 secret:
   API_SECRET: --- YOUR-API-SECRET ---
@@ -29,6 +30,7 @@ secret:
   TLS_CRT:  --- YOUR-TLS ---
   TLS_KEY:  --- YOUR-KEY ---
   MODE: bGVnYWN5
+
 
 env:
   API_SERVER_URL: https://api.staging.01cloud.dev

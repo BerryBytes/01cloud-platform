@@ -42,8 +42,6 @@ spec:
             name: config
             subPath: config.js
         dnsPolicy: ClusterFirst
-        imagePullSecrets:
-        - name: ovh-registry
         restartPolicy: Always
         volumes:
         - configMap:
@@ -69,6 +67,8 @@ spec:
       spec:
         containers:
         - env:
+          - name: ALLOWED_ORIGINS
+            value: "{{.Values.env.ALLOWED_ORIGINS}}"
           - name: STORE_TYPE
             value: {{.Values.env.STORE_TYPE}}
           - name: MESSAGE_TYPE
@@ -129,11 +129,6 @@ spec:
             value: {{.Values.env.adminEmail}}
           - name: DOCKER_PLUGIN_ID
             value: {{.Values.env.dockerPluginId | quote}}
-          - name: MODE
-            valueFrom:
-              secretKeyRef:
-                name: env-secrets
-                key: MODE
           - name: HELM_PLUGIN_ID
             value: {{.Values.env.dockerPluginId | quote}}
           - name: OPERATOR_PLUGIN_ID
@@ -186,8 +181,6 @@ spec:
           - mountPath: /data
             name: 01cloud-data
         dnsPolicy: ClusterFirst
-        imagePullSecrets:
-        - name: ovh-registry
         restartPolicy: Always
         volumes:
         - name: 01cloud-data
@@ -239,8 +232,6 @@ spec:
             name: config
             subPath: config.js
         dnsPolicy: ClusterFirst
-        imagePullSecrets:
-        - name: ovh-registry
         restartPolicy: Always
         volumes:
         - configMap:

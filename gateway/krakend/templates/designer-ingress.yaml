@@ -1,0 +1,21 @@
+{{- if .Values.designer.ingress.enabled | default false }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "krakend.fullname" . }}-designer-ingress
+  namespace: {{ .Values.namespace }}
+  annotations:
+    kubernetes.io/ingress.class: {{ .Values.designer.ingress.class }}
+spec:
+  rules:
+    - host: {{ .Values.designer.ingress.host }}
+      http:
+        paths:
+          - path: {{ .Values.designer.ingress.path }}
+            pathType: {{ .Values.designer.ingress.pathType }}
+            backend:
+              service:
+                name: {{ include "krakend.fullname" . }}-designer
+                port:
+                  number: {{ .Values.designer.service.port }}
+{{- end }}

@@ -1,0 +1,129 @@
+apiVersion: v1
+kind: List
+items:
+- apiVersion: gateway.networking.k8s.io/v1
+  kind: HTTPRoute
+  metadata:
+    annotations:
+      gateway.networking.k8s.io/generator: ingress2gateway-v0.5.0-rc1-1-ge79e5af
+    name: 01cloud-api-test-01cloud-dev
+    namespace: 01cloud-staging
+  spec:
+    hostnames:
+    - api.staging.01cloud.dev
+    parentRefs:
+    - name: staging-gateway
+      namespace: envoy-gateway-system
+    rules:
+    - backendRefs:
+      - name: cloud-api
+        port: 8081
+      matches:
+      - path:
+          type: PathPrefix
+          value: /
+- apiVersion: gateway.networking.k8s.io/v1
+  kind: HTTPRoute
+  metadata:
+    annotations:
+      gateway.networking.k8s.io/generator: ingress2gateway-v0.5.0-rc1-1-ge79e5af
+    name: 01cloud-terminal-test-01cloud-dev
+    namespace: 01cloud-staging
+  spec:
+    hostnames:
+    - terminal.staging.01cloud.dev
+    parentRefs:
+    - name: staging-gateway
+      namespace: envoy-gateway-system
+    rules:
+    - backendRefs:
+      - name: cloud-terminal
+        port: 8080
+      matches:
+      - path:
+          type: PathPrefix
+          value: /
+- apiVersion: gateway.networking.k8s.io/v1
+  kind: HTTPRoute
+  metadata:
+    annotations:
+      gateway.networking.k8s.io/generator: ingress2gateway-v0.5.0-rc1-1-ge79e5af
+    name: tyk-gateway-ingress-ws-gateway-test-01cloud-dev
+    namespace: 01cloud-staging
+  spec:
+    hostnames:
+    - ws-gateway.staging.01cloud.dev
+    parentRefs:
+    - name: staging-gateway
+      namespace: envoy-gateway-system
+    rules:
+    - backendRefs:
+      - name: tyk-gateway
+        port: 8080
+      matches:
+      - path:
+          type: PathPrefix
+          value: /
+- apiVersion: gateway.networking.k8s.io/v1
+  kind: HTTPRoute
+  metadata:
+    annotations:
+      gateway.networking.k8s.io/generator: ingress2gateway-v0.5.0-rc1-1-ge79e5af
+    name: 01cloud-admin-test-01cloud-dev
+    namespace: 01cloud-staging
+  spec:
+    hostnames:
+    - admin.staging.01cloud.dev
+    parentRefs:
+    - name: staging-gateway
+      namespace: envoy-gateway-system
+    rules:
+    - backendRefs:
+      - name: cloud-admin
+        port: 80
+      matches:
+      - path:
+          type: PathPrefix
+          value: /
+- apiVersion: gateway.networking.k8s.io/v1
+  kind: HTTPRoute
+  metadata:
+    annotations:
+      gateway.networking.k8s.io/generator: ingress2gateway-v0.5.0-rc1-1-ge79e5af
+    name: krakend-ingress-api-gateway-test-01cloud-dev
+    namespace: krakend
+  spec:
+    hostnames:
+    - api-gateway.staging.01cloud.dev
+    parentRefs:
+    - name: staging-gateway
+      namespace: envoy-gateway-system
+    rules:
+    - backendRefs:
+      - name: krakend
+        port: 8080
+      matches:
+      - path:
+          type: PathPrefix
+          value: /
+- apiVersion: gateway.networking.k8s.io/v1
+  kind: HTTPRoute
+  metadata:
+    annotations:
+      gateway.networking.k8s.io/generator: ingress2gateway-v0.5.0-rc1-1-ge79e5af
+    name: 01cloud-ui-console-test-01cloud-dev
+    namespace: 01cloud-staging
+  spec:
+    hostnames:
+    - console.staging.01cloud.dev
+    parentRefs:
+    - name: staging-gateway
+      namespace: envoy-gateway-system
+    rules:
+    - backendRefs:
+      - name: cloud-ui
+        port: 80
+      matches:
+      - path:
+          type: PathPrefix
+          value: /

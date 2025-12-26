@@ -69,8 +69,6 @@ spec:
           volumeMounts:
           - mountPath: /data
             name: 01cloud-data
-        imagePullSecrets:
-        - name: ovh-registry
         restartPolicy: Always
         volumes:
         - name: 01cloud-data
@@ -135,8 +133,6 @@ spec:
           volumeMounts:
           - mountPath: /data
             name: 01cloud-data
-        imagePullSecrets:
-        - name: ovh-registry
         restartPolicy: Always
         volumes:
         - name: 01cloud-data
@@ -209,8 +205,6 @@ spec:
           volumeMounts:
           - mountPath: /data
             name: 01cloud-data
-        imagePullSecrets:
-        - name: ovh-registry
         restartPolicy: Always
         volumes:
         - name: 01cloud-data

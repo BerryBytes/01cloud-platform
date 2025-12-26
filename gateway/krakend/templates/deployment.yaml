@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "krakend.fullname" . }}
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.selector.app }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.selector.app }}
+    spec:
+      containers:
+        - name: krakend
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.service.port }}
+            - containerPort: 9091
+          volumeMounts:
+            - name: krakend-config
+              mountPath: /etc/krakend/krakend.json
+              subPath: krakend.json
+          args: ["run", "--config", "/etc/krakend/krakend.json"]
+      volumes:
+        - name: krakend-config
+          configMap:
+            name: {{ .Values.configMap.name }}

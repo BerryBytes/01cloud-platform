@@ -86,8 +86,6 @@ spec:
         - mountPath: /data
           name: 01cloud-data
       dnsPolicy: ClusterFirst
-      imagePullSecrets:
-      - name: ovh-registry
       restartPolicy: Always
       schedulerName: default-scheduler
       volumes:

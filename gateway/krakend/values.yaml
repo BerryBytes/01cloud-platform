@@ -1,0 +1,46 @@
+replicaCount: 1
+
+image:
+  repository: devopsfaith/krakend
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8080
+  targetPort: 8080
+
+ingress:
+  enabled: false
+  class: nginx
+  host: devopstest-krakend.checkmysite.live
+  path: /
+  pathType: Prefix
+
+namespace: krakend
+selector:
+  app: krakend
+
+configMap:
+  name: krakend-config
+
+designer:
+  replicaCount: 0
+  selector:
+    app: designer-krakend
+  containers:
+    name: designer-krakend
+  image:
+    repository: krakend/designer
+    tag: latest
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 8080
+    targetPort: 80
+  ingress:
+     enabled: false
+     class: nginx-internal
+     host: devopstest-krakend-designer.checkmysite.live
+     path: /
+     pathType: Prefix

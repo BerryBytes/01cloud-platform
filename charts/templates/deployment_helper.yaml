@@ -77,8 +77,6 @@ spec:
         persistentVolumeClaim:
           claimName: pvc-01cloud-data
       dnsPolicy: ClusterFirst
-      imagePullSecrets:
-      - name: ovh-registry
       restartPolicy: Always
       schedulerName: default-scheduler
 ---
@@ -197,8 +195,6 @@ spec:
             port: 01cloud-http
           timeoutSeconds: 1
       dnsPolicy: ClusterFirst
-      imagePullSecrets:
-      - name: ovh-registry
       restartPolicy: Always
       schedulerName: default-scheduler
       terminationGracePeriodSeconds: 30
@@ -269,8 +265,6 @@ spec:
         - mountPath: /data
           name: 01cloud-data
       dnsPolicy: ClusterFirst
-      imagePullSecrets:
-      - name: ovh-registry
       restartPolicy: Always
       schedulerName: default-scheduler
       volumes:
@@ -381,8 +375,6 @@ spec:
         volumeMounts:
         - mountPath: /data
           name: 01cloud-data
-      imagePullSecrets:
-      - name: ovh-registry
       restartPolicy: Always
       volumes:
       - name: 01cloud-data
@@ -447,8 +439,6 @@ spec:
             port: 01cloud
           timeoutSeconds: 1
       dnsPolicy: ClusterFirst
-      imagePullSecrets:
-      - name: ovh-registry
       restartPolicy: Always
 ---
 
@@ -499,8 +489,6 @@ spec:
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
       dnsPolicy: ClusterFirst
-      imagePullSecrets:
-      - name: ovh-registry
       restartPolicy: Always
       schedulerName: default-scheduler
 ---
@@ -538,8 +526,6 @@ spec:
         volumeMounts:
         - mountPath: /data
           name: 01cloud-data
-      imagePullSecrets:
-      - name: ovh-registry
       restartPolicy: Always
       volumes:
       - name: 01cloud-data

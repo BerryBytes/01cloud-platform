@@ -1,4 +1,4 @@
-For implementing alert manager in the skaffold environemnt, follow the steps below:
+For implementing alert manager in the skaffold environment, follow the steps below:
 
 ## Step 1:
 Add Prometheus repo in a separate namespace for monitoring
