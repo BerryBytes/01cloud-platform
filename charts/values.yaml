@@ -18,14 +18,14 @@ image:
   exsecret: 01community/01cloud-exsecret:v0.0.1
   logging: 01community/01cloud-exlogger:v0.0.1
 
-## This secret are stored in the env-sec which will be using in the microservices (e.g. api, controllers) 
+## This secret are stored in the env-sec which will be using in the microservices (e.g. api, controllers)
 secret:
   API_SECRET: --- YOUR-API-SECRET ---                   # Generate a strong random string
   DB_PASSWORD: --- YOUR-DB-PASSWORD ---                 # PSQL DB Password (for helm chart)
   SMTP_PASSWORD: --- YOUR-SMTP-PASSWORD ---             # SMTP password ( SendGrid API Key or SMTP password)
   DB_URL: --- YOUR-DB-URL ---                           # Database connection URL for microservices
-  MONGO_URL: --- YOUR-MONGO-URL ---                     # MongoDB connection URL for microservices        
-  RABBITMQ_URL: --- YOUR-RABBITMQ-URL ---               # RabbitMQ connection URL for microservices 
+  MONGO_URL: --- YOUR-MONGO-URL ---                     # MongoDB connection URL for microservices
+  RABBITMQ_URL: --- YOUR-RABBITMQ-URL ---               # RabbitMQ connection URL for microservices
   MONGODB_PASSWORD: --- YOUR-MONGO-PASSWORD ---         # MongoDB Password (for helm chart)
   RABBITMQ_PASSWORD: --- YOUR-RABBITMQ-PASSWORD ---     # RabbitMQ Password (for helm chart)
   MODE: bGVnYWN5
@@ -57,8 +57,8 @@ env:
   monitoringServerUrl: http://cloud-monitoring:8081
   paymentServerUrl: http://cloud-payments:8080
   helmcdServerUrl: http://cloud-helm-cd:8080
-  
-### Your SMTP settings here   
+
+### Your SMTP settings here
 
   SMTP_FROM_ADDRESS: --- YOUR-EMAIL-ADDRESS ---
   SMTP_HOST: --- YOUR-SMTP-HOST ---
