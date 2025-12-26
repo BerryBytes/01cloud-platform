@@ -36,7 +36,7 @@ A local, reproducible Kubernetes development environment for the 01Cloud platfor
   - [Stopping and cleanup](#stopping-and-cleanup)
 - [Configuration](#configuration)
   - [Helm values](#helm-values)
-  - [Ingress and hostnames](#ingress-and-hostnames)
+  - [Httproutes and hostnames](#httproute-and-hostnames)
   - [Images and building locally](#images-and-building-locally)
 - [Alerting and Monitoring](#alerting-and-monitoring)
 - [Contributing](#contributing)
@@ -47,11 +47,11 @@ A local, reproducible Kubernetes development environment for the 01Cloud platfor
 
 ## Overview
 
-01Cloud Development Environment is a batteries-included local stack to run the full 01Cloud platform on Kubernetes. It automates cluster setup, installs core controllers (Ingress, Tekton, MetalLB), provisions databases and messaging, deploys all 01Cloud services via a Helm chart, and optionally seeds the system with sample configuration and data for an instant test drive.
+01Cloud Development Environment is a batteries-included local stack to run the full 01Cloud platform on Kubernetes. It automates cluster setup, installs core controllers (Gateway API, Tekton, MetalLB), provisions databases and messaging, deploys all 01Cloud services via a Helm chart, and optionally seeds the system with sample configuration and data for an instant test drive.
 
 What it does:
 - Creates or prepares a local Kubernetes cluster (Kind)
-- Installs ingress and load balancer controllers
+- Installs Gateway API and load balancer controllers
 - Deploys databases and queues (PostgreSQL, MongoDB, RabbitMQ)
 - Deploys all 01Cloud microservices via Helm and Skaffold
 - Sets up local hostnames and TLS for easy browsing
@@ -77,26 +77,28 @@ Why it was created:
 ## Features
 
 - One-command bootstrap of the full stack via a friendly CLI
-- Local Kubernetes with Kind and MetalLB, plus NGINX Ingress
+- Local Kubernetes with Kind and MetalLB, plus Gateway API Controller
 - Tekton installation for CI/CD workflows inside the cluster
 - Helm chart to deploy 01Cloud microservices with configurable values
 - Skaffold integration for dev/run/build workflows
-- Predefined services and ingresses for UI, Admin, API, Terminal, etc.
+- Predefined services and httproute for UI, Admin, API, Terminal, etc.
 - Data layer ready out-of-the-box: PostgreSQL, MongoDB, RabbitMQ
 - Seeder utility to populate default configuration and sample data
 - Hostname automation to route staging.* domains to your local cluster
 - Clean teardown of services and data
+- Integrated Auth0 authentication with KrakenD API Gateway
 
 ---
 
 ## Architecture and Components
 
 Core components deployed by this environment:
-- Controllers: NGINX Ingress Controller, MetalLB, Tekton
+- Controllers: Gateway API Controller, MetalLB, Tekton
 - Data services: PostgreSQL, MongoDB, RabbitMQ
 - 01Cloud services: UI, Admin, API, Core, Notifications, Payments, Support, Monitoring, Backup, Helm CD, Terminal
+- Authentication: Auth0 + KrakenD API Gateway for JWT validation
 - Observability hooks: optional logging and monitoring configuration
-- TLS integration and ingress with hostnames like console.staging.01cloud.dev
+- TLS integration and httproute with hostnames like console.staging.01cloud.dev
 
 All services are orchestrated via:
 - Helm chart at charts/
@@ -116,6 +118,9 @@ All services are orchestrated via:
   - Helm 3.x
   - Skaffold 2.x
   - git, curl, jq
+  - Configure Auth0 and KrankenD, see [Authentication Configuration Guide](AUTHENTICATION-CONFIGURATION.md) for detailed steps
+
+
 Install snippets (Linux/Ubuntu):
 
 
@@ -124,7 +129,7 @@ Install snippets (Linux/Ubuntu):
 You can create your own cluster or use the provided multi-node config for kind:
 
 ```bash
-# Creates a 3-node cluster (1 control-plane, 2 workers) 
+# Creates a 3-node cluster (1 control-plane, 2 workers)
 kind create cluster --name 01cloud-dev --config test-cluster.yaml
 ```
 Verify:
@@ -133,6 +138,7 @@ Verify:
 kubectl cluster-info
 kubectl get nodes
 ```
+
 ### 2)Template preparation:
 Fill the values [`Values.yaml`](charts/values.yaml)  and [`ConfigMap.yaml`](charts/template/configmap.yaml) inside the charts/template folder. These Template are necessary during provision for one to get features like 0Auth, mail service etc.
 
@@ -154,7 +160,7 @@ chmod +x ./01cloud
 Option B: Step-by-step
 
 ```bash
-# Install MetalLB, Tekton, and NGINX Ingress Controller
+# Install MetalLB, Tekton, and Gateway API Controller
 ./01cloud setup
 
 # Add hostnames (requires sudo)
@@ -175,7 +181,7 @@ Option B: Step-by-step
 
 ```bash
 kubectl get pods -n 01cloud-staging
-kubectl get ing -A
+kubectl get httproutes -A
 ```
 Then open in your browser:
 - https://console.staging.01cloud.dev
@@ -197,7 +203,7 @@ Common commands:
 
 ```bash
 ./01cloud install [env [mode]]   # setup + host + dbrun + run (+ seed in install.sh)
-./01cloud setup [env [mode]]     # install required controllers (Tekton, Ingress, MetalLB)
+./01cloud setup [env [mode]]     # install required controllers (Tekton, Gateway API, MetalLB)
 ./01cloud host [add|remove]      # map local LB IP to staging.* hostnames in /etc/hosts
 ./01cloud dbrun [rwo|rwx]        # install PostgreSQL, MongoDB, RabbitMQ with PVCs
 ./01cloud dbseed                 # seed sample data and defaults
@@ -217,7 +223,7 @@ Notes:
 ### Environments, hosts, and data
 
 - Namespace: 01cloud-staging
-- Hostnames (mapped to your local LB IP via host): 
+- Hostnames (mapped to your local LB IP via host):
   - console.staging.01cloud.dev
   - admin.staging.01cloud.dev
   - api.staging.01cloud.dev
@@ -242,7 +248,7 @@ Tip: Review seeder/seeder.sh to understand exactly what is being created and adj
 # Remove app + DB resources
 ./01cloud dbstop
 
-# Remove all setup (ingress, controllers) and resources
+# Remove all setup (Gateway API, controllers) and resources
 ./01cloud clean
 
 # Optionally delete the Kind cluster when finished
@@ -291,7 +297,7 @@ This project is licensed under the MIT License. See the LICENSE file for details
 ## Credits
 
 - 01Cloud team at [BerryBytes](https://01cloud.io/)
-- Open-source projects that make this possible: Kubernetes, Kind, Helm, Skaffold, Tekton, MetalLB, NGINX Ingress Controller, PostgreSQL, MongoDB, RabbitMQ, Loki, and others.
+- Open-source projects that make this possible: Kubernetes, Kind, Helm, Skaffold, Tekton, MetalLB, Gateway API Controller, PostgreSQL, MongoDB, RabbitMQ, Loki, and others.
 
 If your organization uses this environment or contributes improvements, consider adding yourself to CONTRIBUTORS.md in a future PR.
 
@@ -307,7 +313,7 @@ If your organization uses this environment or contributes improvements, consider
 
 ## Troubleshooting
 
-- No external IP for ingress:
+- No external IP for gatewway:
   - Ensure MetalLB installed and ready: kubectl get pods -n metallb-system
   - Re-run: ./01cloud setup
 - Hostnames not resolving:

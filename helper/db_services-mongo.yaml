@@ -369,4 +369,3 @@ items:
       app.kubernetes.io/name: mongodb
       statefulset.kubernetes.io/pod-name: mongodb-2
 kind: List
-

@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "krakend.fullname" . }}-designer
+  namespace: {{ .Values.namespace }}
+spec:
+  type: {{ .Values.designer.service.type }}
+  ports:
+    - port: {{ .Values.designer.service.port }}
+      targetPort: {{ .Values.designer.service.targetPort }}
+  selector:
+    app: {{ .Values.designer.selector.app }}

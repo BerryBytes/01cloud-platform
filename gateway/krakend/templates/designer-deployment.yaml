@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "krakend.fullname" . }}-designer
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.designer.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.designer.selector.app }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.designer.selector.app }}
+    spec:
+      containers:
+        - name: {{ .Values.designer.containers.name }}
+          image: "{{ .Values.designer.image.repository }}:{{ .Values.designer.image.tag }}"
+          imagePullPolicy: {{ .Values.designer.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.designer.service.targetPort }}

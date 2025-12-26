@@ -40,6 +40,7 @@ then
         echo "Payment Pod status :: $ready, sleeping for 10 seconds..."
         sleep 10
     done
+    sleep 10
     bash seeder/seeder.sh
 else
     echo "Need sudo permission to run this command"

@@ -1,0 +1,40 @@
+{
+  "$schema": "https://www.krakend.io/schema/v3.json",
+  "version": 3,
+  "name": "test-api-gateway",
+  "timeout": "60s",
+  "extra_config": {
+    {{ include "cors_config_global.tmpl" }},
+    {{ include "extra_config_monitoring.tmpl" }},
+    {{ include "extra_config_logging.tmpl" }},
+     "router": {
+      "return_error_msg": true
+    }
+  },
+  "endpoints": [{{ range $idx, $endpoint := .endpoints.endpoints }}{{if $idx}},{{end}}
+    {
+        "endpoint": "{{ $endpoint.endpoint }}",
+        "method": "{{ $endpoint.method }}",
+        "input_headers": {{ marshal $endpoint.input_headers }},
+        "output_encoding": "{{ $endpoint.output_encoding }}",
+        "extra_config": {
+          {{ include "auth0_validator.tmpl" }}
+        },
+        "backend": [
+          {
+            "is_collection": {{ if eq $endpoint.is_collection "true" }}true{{ else }}false{{ end }},
+            "encoding": "json",
+            "host": [
+              "{{ $endpoint.backend_host }}"
+            ],
+            "url_pattern": "{{ $endpoint.backend_url_pattern }}",
+            "extra_config": {
+              {{ include "rate_limit_backend.tmpl" }}
+            }
+          }
+        ]
+    }
+    {{ end }},
+    {{ template "endpoints.tmpl" . }}
+  ]
+}

@@ -1,4 +1,4 @@
-For implementing alert manager in the skaffold environemnt, follow the steps below:
+For implementing alert manager in the skaffold environment, follow the steps below:
 
 ## Step 1:
 Add Prometheus repo in a separate namespace for monitoring
@@ -32,8 +32,8 @@ data:
 	receivers:
     	webhook_configs:
             	- url: 'http://gchat-alertmanager-gchat-integration:80/alerts?room=01cloudAlerts' ```
-```		
-			
+```
+
 ## Step 5:
 Create configmap of prometheus-server with the necessary alerting rules.
 
@@ -56,4 +56,3 @@ data:
   config.toml: <base 64 config converted from step 6>>
 kind: Secret
 ```
-

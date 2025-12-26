@@ -95,4 +95,3 @@ echo "  build       build the image with skaffold."
 echo "  deploy      deploy 01cloud with default settings."
 echo "  clean       remove all the setup and deployed services."
 fi
-
