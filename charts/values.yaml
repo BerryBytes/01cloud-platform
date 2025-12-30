@@ -18,18 +18,21 @@ image:
   exsecret: 01community/01cloud-exsecret:v0.0.1
   logging: 01community/01cloud-exlogger:v0.0.1
 
+## This secret are stored in the env-sec which will be using in the microservices (e.g. api, controllers)
 secret:
-  API_SECRET: --- YOUR-API-SECRET ---
-  DB_PASSWORD: --- YOUR-DB-PASSWORD ---
-  SMTP_PASSWORD: --- YOUR-SMTP-PASSWORD ---
-  DB_URL: --- YOUR-DB-URL ---
-  MONGO_URL: --- YOUR-MONGO-URL ---
-  RABBITMQ_URL: --- YOUR-RABBITMQ-URL ---
-  MONGODB_PASSWORD: --- YOUR-MONGO-PASSWORD ---
-  RABBITMQ_PASSWORD: --- YOUR-RABBITMQ-PASSWORD ---
+  API_SECRET: --- YOUR-API-SECRET ---                   # Generate a strong random string
+  DB_PASSWORD: --- YOUR-DB-PASSWORD ---                 # PSQL DB Password (for helm chart)
+  SMTP_PASSWORD: --- YOUR-SMTP-PASSWORD ---             # SMTP password ( SendGrid API Key or SMTP password)
+  DB_URL: --- YOUR-DB-URL ---                           # Database connection URL for microservices
+  MONGO_URL: --- YOUR-MONGO-URL ---                     # MongoDB connection URL for microservices
+  RABBITMQ_URL: --- YOUR-RABBITMQ-URL ---               # RabbitMQ connection URL for microservices
+  MONGODB_PASSWORD: --- YOUR-MONGO-PASSWORD ---         # MongoDB Password (for helm chart)
+  RABBITMQ_PASSWORD: --- YOUR-RABBITMQ-PASSWORD ---     # RabbitMQ Password (for helm chart)
+  MODE: bGVnYWN5
+
+  # Base64 encoded TLS certs for Ingress TLS termination( can use mkcert to generate self-signed certs for testing)
   TLS_CRT:  --- YOUR-TLS ---
   TLS_KEY:  --- YOUR-KEY ---
-  MODE: bGVnYWN5
 
 
 env:
@@ -43,11 +46,8 @@ env:
   paymentFailedUiUrl: https://console.staging.01cloud.dev/payment/failure
   terminalUrl: https://terminal.staging.01cloud.dev
   PROMETHEUS_API_URL: http://prometheus-operated.monitoring.svc.cluster.local:9090
-  REACT_APP_AUTH0_MODE: "legacy"
-  REACT_APP_AUTH0_DOMAIN: " "
-  REACT_APP_AUTH0_CLIENT_ID: " "
-  REACT_APP_AUTH0_AUDIENCE: " "
 
+# Ingress Domain
 
   API_SERVER_WS: ws://cloud-api.01cloud-staging.svc:8081
   GRPC_NOTIFICATION_SERVER: cloud-notifications:10081
@@ -58,24 +58,38 @@ env:
   paymentServerUrl: http://cloud-payments:8080
   helmcdServerUrl: http://cloud-helm-cd:8080
 
+### Your SMTP settings here
+
   SMTP_FROM_ADDRESS: --- YOUR-EMAIL-ADDRESS ---
   SMTP_HOST: --- YOUR-SMTP-HOST ---
   SMTP_PORT: --- YOUR-SMTP-PORT ---
-  SMTP_USERNAME: apikey
+  SMTP_USERNAME: --- YOUR-SMTP-USERNAME ---
+  SMTP_USERNAME: --- YOUR-SMTP-USERNAME ---
+
+### DB_services.yaml, Change according to your preference
   DB_DRIVER: postgres
   DB_HOST: staging-postgres-postgresql
   DB_NAME: cloud
   DB_PORT: "5432"
   DB_USER: berrybytes
   DB_BACKUP_PATH: /data/db-backup
+  adminEmail: --- YOUR-ADMIN-MAIL-FOR-01CLOUD ---
+
   MONGO_DB: cloud
   mongoUser: berrybytes
   rabbitmqUser: berrybytes
   STORE_TYPE: mongo
   MESSAGE_TYPE: rabbitmq
-  GCLOUD_NAMESPACE: --- YOUR-GCLOUD-NAMESPACE (OPTIONAL) ---
-  GCLOUD_PROJECT: --- YOUR-GCLOUD-PROJECT (OPTIONAL) ---
-  GOOGLE_APPLICATION_CREDENTIALS: /data/gcloud.json
+
+## Payment
+  invoicePath: /data/invoices
+
+##  Recaptcha
+  RECAPTCHA_SECRET: --- YOUR-RECAPTCHA-SECRET ---
+
+## Change these values according to your preference( used in cname creation for running application)
+  GCLOUD_NAMESPACE: staging             #default
+  GCLOUD_PROJECT: 01cloud-staging       #default
 
   TLS: zerone-tls-cert
   dockerPluginId: "3"
@@ -83,9 +97,6 @@ env:
   TEKTON_FILE_PATH_v1: data.sample/v1
   VCLUSTER_API_URL: https://zerone-4409-9534.01cloud.com/v1
   ZERONE_API_URL: https://api.staging.01cloud.dev
-  invoicePath: /data/invoices
-  adminEmail: --- YOUR-ADMIN-EMAIL ---
-  RECAPTCHA_SECRET: --- YOUR-RECAPTCHA-SECRET ---
   storageAccessKey: --- YOUR-STORAGE-ACCESS-KEY ---
   storageSecretKey: --- YOUR-STORAGE-SECRET-KEY ---
 

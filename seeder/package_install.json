@@ -45,13 +45,13 @@
 		"description": "Reloader is a tool to  watch changes in ConfigMap and Secret and do rolling upgrades on Pods with their associated DeploymentConfigs, Deployments, Daemonsets and Statefulsets."
 	},
 	 {
-                "chart": "zerone/secret-patcher",
-                "name": "secret-patcher",
+		"chart": "zerone/secret-patcher",
+		"name": "secret-patcher",
 		"title": "Secret Patcher",
 		"namespace": "zerone-secret-patcher",
-                "optional": true,
-                "icon": "https://console.01cloud.io/meta.jpg",
-                "description": "Secret Patcher patches the  service account with an imagepullsecrets that allows the service account of the pod to pull the  images from container registry"
+		"optional": true,
+		"icon": "https://console.01cloud.io/meta.jpg",
+		"description": "Secret Patcher patches the  service account with an imagepullsecrets that allows the service account of the pod to pull the  images from container registry"
         },
         {
 		"chart": "zerone/velero",
@@ -82,14 +82,14 @@
 	},
 
 	{
-                "chart": "zerone/tekton",
-                "name": "tekton",
-                "title": "Tekton",
-                "namespace": "tekton-pipelines",
-                "optional": true,
-                "icon": "https://avatars.githubusercontent.com/u/47602533?s=280&v=4",
-                "description": "A package to install powerful and flexible kubernetes-native open source CI/CD systems"
-        },
+		"chart": "zerone/tekton",
+		"name": "tekton",
+		"title": "Tekton",
+		"namespace": "tekton-pipelines",
+		"optional": true,
+		"icon": "https://avatars.githubusercontent.com/u/47602533?s=280&v=4",
+		"description": "A package to install powerful and flexible kubernetes-native open source CI/CD systems"
+	},
 
 	{
 		"chart": "zerone/prometheus-operator",
@@ -121,28 +121,28 @@
 		"required_dns": false,
 		"icon": "https://console.01cloud.io/meta.jpg",
 		"description": "The Logging operator manages the log collectors and log forwarders of your logging infrastructure, and the routing rules that specify where you want to send your different log messages."
-		},
-		{
-			"chart": "zerone/flagger",
-			"name": "flagger",
-			"title": "Flagger",
-			"optional": true,
-			"namespace": "zerone-flagger",
-			"required_dns": false,
-			"icon": "https://console.01cloud.io/meta.jpg",
-			"description": "Progressive Delivery operator for Kubernetes (Canary, A/B Testing and Blue/Green deployments)"
-		},
+	},
+	{
+		"chart": "zerone/flagger",
+		"name": "flagger",
+		"title": "Flagger",
+		"optional": true,
+		"namespace": "zerone-flagger",
+		"required_dns": false,
+		"icon": "https://console.01cloud.io/meta.jpg",
+		"description": "Progressive Delivery operator for Kubernetes (Canary, A/B Testing and Blue/Green deployments)"
+	},
 
-		        {
-            "chart": "zerone/openebs",
-            "name": "openebs",
-            "title": "openebs",
-            "optional": true,
-            "namespace": "zerone-openebs",
-            "required_dns": false,
-            "icon": "https://console.01cloud.io/meta.jpg",
-            "description": " OpenEBS turns any storage available to Kubernetes worker nodes into Local or Distributed Kubernetes Persistent Volumes."
-        }],
+			{
+		"chart": "zerone/openebs",
+		"name": "openebs",
+		"title": "openebs",
+		"optional": true,
+		"namespace": "zerone-openebs",
+		"required_dns": false,
+		"icon": "https://console.01cloud.io/meta.jpg",
+		"description": " OpenEBS turns any storage available to Kubernetes worker nodes into Local or Distributed Kubernetes Persistent Volumes."
+	}],
 	"repositories": [{
 		"name": "zerone",
 		"url": "https://berrybytes.github.io/helm-chart-org"
